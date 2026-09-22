@@ -7,7 +7,8 @@ It has two modes:
 - **Campaign**: a text-based sci-fi RPG. An ancient alien computer, the Custodian, only runs
   rewrites it can justify. You start with a single axiom, practise it on problems ("registers"),
   and unlock new modules. Techniques you've practised enough compile into tools and daemons. Each
-  AoPS chapter is a sector of the ship. See [docs/STORY.md](docs/STORY.md).
+  AoPS chapter is a sector of the ship. Ch. 1 is playable, and so are §2.1–2.2 (Squares, Higher Exponents) of Ch. 2. See
+  [docs/STORY.md](docs/STORY.md).
 - **Simulator**: every rule, any problem, nothing recorded.
 
 ```bash
@@ -29,6 +30,7 @@ Notation follows the book:
 - `a / b` is division, shown as a ÷ b.
 - `recip(x)` is the reciprocal, shown as 1/x.
 - `-x` is negation, which is different from subtraction `a - b`.
+- `a^2` is a power. Powers bind tighter than negation, so `-2^2` is `-(2^2)`, not `(-2)^2`.
 
 Rules match only the literal form the book states. For example, "Multiplying by 1" is `1a = a`, so
 `a·1` needs the Commutative Property first. Moves that introduce terms (like `a → a + 0`) are hidden
@@ -104,12 +106,15 @@ playable. A chapter declares:
 
 - **skills**: modules that group tactic ids. A skill is granted by a mission (`grants`) or compiled
   by the player (`compile: { uses, missions }`). `supersedes` hides older tools, e.g. ALU tiers.
+  Kinds are `axiom`, `tool`, `daemon`, and `theorem`. A theorem is a statement the player proved in
+  a mission (e.g. `(a + 1)² = a² + 2a + 1`), so it compiles from that mission alone.
 - **missions**: usually one or more per AoPS section, each with a briefing, a debrief, and
   problems. `requires` gates a mission on a compiled skill, `boss` marks the review mission, and
   `optional` marks challenge problems.
 - **problems**: `start`, `goal` (`match` an expression, reduce to a `value`, or `solve` an
   equation), and `par`. `forbid` takes skills offline for one problem. A problem that needs
-  free-form input (rearrangements) needs an authored `solution`.
+  free-form input (rearrangements) needs an authored `solution`. So does a problem too wide for
+  the search budget; say in a comment why its length is minimal.
 
 `npm test` then checks the chapter. It simulates a player who plays in order, compiles modules as
 soon as they're ready, and solves each problem optimally. Every problem must be reachable with

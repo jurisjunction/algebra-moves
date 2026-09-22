@@ -11,7 +11,8 @@ export interface Line {
   text: string;
 }
 
-export type SkillKind = "axiom" | "tool" | "daemon";
+/** A theorem is a statement the player proved by hand; it compiles into a rule like any other. */
+export type SkillKind = "axiom" | "tool" | "daemon" | "theorem";
 
 /**
  * A skill is a module in the Custodian's instruction set. Owning it makes its tactics

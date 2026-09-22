@@ -32,6 +32,16 @@ body {
 .am-interactive [data-path]:hover:not(:has([data-path]:hover)) {
   background-color: rgb(34 211 238 / 0.14);
 }
+/* KaTeX stacks fraction rows (and superscripts) in tall positioning spans that overlap, so the
+   numerator's span covers the denominator and swallows its clicks. Only the rows' content should
+   take the pointer. */
+.am-interactive .vlist,
+.am-interactive .vlist > span {
+  pointer-events: none;
+}
+.am-interactive .vlist > span > :not(.pstrut) {
+  pointer-events: auto;
+}
 .am-focus {
   background-color: rgb(34 211 238 / 0.16);
   box-shadow: 0 0 0 1.5px rgb(34 211 238 / 0.85), 0 0 14px rgb(34 211 238 / 0.35);

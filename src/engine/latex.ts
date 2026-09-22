@@ -77,7 +77,7 @@ export function toLatex(root: MathNode, opts: LatexOptions = {}): string {
         const lp = prec(l) < 2 || isNeg(l) || isOp(l, "divide") || (!!opts.explicitGrouping && isOp(l, "multiply"));
         const rp = prec(r) <= 2 || isNeg(r);
         // Juxtapose like the book (2x, xy, 51(9+31)); otherwise use a centered dot.
-        const juxtapose = (lp || isAtom(l)) && (isSym(r) || rp);
+        const juxtapose = (lp || isAtom(l)) && (isSym(r) || rp || (isOp(r, "pow") && isSym(r.args[0])));
         return binary(n, path, juxtapose ? "" : "\\cdot", lp, rp);
       }
       case "divide":

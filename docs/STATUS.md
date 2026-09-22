@@ -1,7 +1,7 @@
 # STATUS — resume here
 
-**Updated:** 2026-09-22 · **Branch:** `feat/lattice-campaign` (3 commits ahead of `main`, pushed,
-**not merged**) · **Tests:** 178 passing · **Build:** clean.
+**Updated:** 2026-09-22 · **Branch:** `feat/lattice-campaign` (not merged to `main`) ·
+**Tests:** 294 passing · **Build:** clean · **Deploy:** GitHub Pages via Actions on every push.
 
 Ten-second orientation: `CLAUDE.md` (rules of the road) → this file (where we are) →
 `docs/SPEC.md` (contracts) → `docs/STORY.md` (narrative + pedagogy).
@@ -12,30 +12,43 @@ Ten-second orientation: `CLAUDE.md` (rules of the road) → this file (where we 
   clickable paths, declarative rule compiler, registry + glob loaders, BFS solver.
 - **Rules** (`src/tactics/`): all of AoPS Ch. 1 (addition, multiplication, distribution, negation,
   subtraction, reciprocals, division), plus rearrange macros, "everywhere" macros, tiered ALU,
-  place-value splitter, integer factoring, equality symmetry.
-- **Campaign** (`src/campaign/`): Ch. 1 "COLD BOOT" fully playable: 14 missions incl. boss and an
-  optional challenge set, 50+ problems, skills granted/compiled, stars/XP/levels, hints, dialogue,
-  instruction set with compile animation, localStorage save. All 14 sectors outlined.
+  place-value splitter, integer factoring, equality symmetry. **Ch. 2 §2.1** in
+  `ch2_01_squares.ts`: definition of square (both ways), square of negation / product / reciprocal /
+  quotient (with "not a sum of squares" and "−2² is not (−2)²" pitfalls), the Next Square theorem
+  `(a+1)² = a²+2a+1 | a²+a+(a+1)`, and the Square Table (0²–29²). **§2.2** in
+  `ch2_02_powers.ts`: definition of power (write out ≤ 12 copies / collect equal factors however
+  grouped), a¹ = a, power of negation (even/odd), power of product/reciprocal/quotient, product,
+  quotient (m > n only) and power of powers, and the Power Table (≤ 1,000,000, plus its reverse,
+  "write as a power of the smallest base").
+- **Campaign** (`src/campaign/`): Ch. 1 "COLD BOOT" fully playable (14 missions). **Ch. 2 "THE
+  STACK" §2.1–2.2 playable**: missions 2.1a–2.1e and 2.2a–2.2f, 49 registers, compiles
+  `sq.table`, `sq.next` (the first **theorem** skill kind), and `pow.table`. The §2.2 skills
+  supersede the §2.1 square skills. Interim outro; see rough edges.
 - **UI**: dark sci-fi theme; shared `Workspace` for campaign and simulator; click / repeat-click /
-  drag / arrow-key selection with breadcrumb; bracket-notation toggle.
+  drag / arrow-key selection with breadcrumb; bracket-notation toggle; Theorems section in the
+  instruction set.
 - **Docs**: `README.md` (play + extend), `docs/SPEC.md`, `docs/STORY.md` (arc, the secret, the
   GEB-influenced pedagogy, planned mechanics).
 
-Verified end to end: a Playwright script played the whole chapter through the real UI, 3★ at par
-on every problem, no console errors.
+Verified end to end: Ch. 1 was played through the real UI earlier. All of Ch. 2 (§2.1–2.2) was
+replayed through the real UI from solver solutions (seeded save with Ch. 1 done): all 49
+registers 3★ at par, three compiles, all debriefs and the outro, no console errors. The production
+build was also loaded from a `/algebra-moves/` subpath, as Pages serves it. The §2.1 UI pass found
+a real bug, fixed in `index.css`: clicks on a denominator selected the whole fraction (KaTeX vlist
+spans overlap).
 
 ## Next steps (pick one)
 
-1. **Merge the branch.** Fast-forward `main` or open a PR. Nothing is merged yet.
-2. **Unreachable register mechanic** (small, high value; spec in `STORY.md` §"Pedagogical style").
-   Adds `Goal` type `unreachable` + a small invariant vocabulary (parity, divisibility, sign) +
-   a checker verifying the invariant holds at the start and survives every allowed tactic, plus a
-   "Declare unreachable" UI move. This is the MU-puzzle lesson and the first rehearsal of the
-   ending; it's the one theme the engine currently cannot express.
-3. **Chapter 2 (Exponents).** Order: rules first (`src/tactics/ch2_*.ts`: `pow.def`, `pow.mul`,
-   `pow.pow`, `pow.zero`, `pow.neg`; the renderer already handles `^`), then
-   `src/campaign/chapters/ch2.ts` (missions per §2 of the outline, compile a `pow-collect` daemon),
-   then run the par check and a UI playthrough. Keep the Ch. 3 foreshadowing beats in mind.
+1. **Playtest feedback** from the user's son (he is reading §2.1–2.2 for Thursday 2026-09-24).
+2. **Ch. 2 §2.3–2.4** (zero exponent, negative exponents). Rules in `ch2_03_*.ts`: `pow.zero`
+   (a⁰ = 1, "the idle state is one"), negative exponents as reciprocals (a⁻ⁿ = 1/aⁿ, ch. 1
+   reciprocals return), and lift the m > n restriction on `pow_sub`. Then **rewrite the ch2
+   outro** as the chapter outro, add the boss (2.x Summary) and an optional challenge set (the
+   ★ exercises, e.g. 2.2.6(j)–(l), 2.2.11). Consider a `pow-collect` daemon and a "repeated
+   addition" move (x + x + x = 3x), which Problems 2.16 and 2.2.3 need and §2.2 skipped.
+3. **Unreachable register mechanic** (small, high value; spec in `STORY.md` §"Pedagogical style").
+   The §2.1 outro now explicitly sets it up ("true whatever rule you use; I have no module for
+   that kind of knowledge"), and "squares are nonnegative" is a ready-made sign invariant.
 4. **Interludes.** Short Custodian/MOTH dialogues between chapters whose form mirrors the idea
    (`STORY.md`). Needs a small `interlude` screen in `CampaignView`.
 
@@ -44,16 +57,26 @@ on every problem, no console errors.
 - Whether `main` should hold this work directly (user has pushed only the feature branch so far).
 - Whether stars should decay on replay (currently best-ever is kept, XP only for improvement).
 - How hard later chapters should lean on `forbid` versus designing problems the stronger tools
-  can't shortcut.
+  can't shortcut. §2.1 uses it for two things: quarantining a law until it's proven, and taking
+  the full ALU offline where structure should beat brute force (4²·25², 101²).
+- Substitution ("evaluate at x = 3") isn't a move; §2.1 problems start already substituted, with
+  the original expression in the flavor text. A `subst` move could come with Ch. 5 (equations).
 
 ## Known limits / rough edges
 
+- **Ch. 2 is partial.** Finishing §2.2 marks the chapter complete, and the shared outro screen
+  says "SECTOR 02 COMPLETE · RESTORED". Adding §2.3 missions reopens the chapter automatically
+  (completion is computed), but the outro text must be rewritten then.
 - ALU is whole numbers only; exact division only. Fractions arrive with Ch. 4.
 - The solver can't search free-form rearrangements, so such problems need an authored `solution`;
-  hints there fall back to the problem's written hint.
+  hints there fall back to the problem's written hint. Three §2.1 arithmetic problems (2.1b-4,
+  2.1d-1, 2.1e-2) exceed the search budget and carry authored solutions with a minimality comment.
+  The 2.2f problems carry authored solutions because the solver doesn't factor numbers > 10,000.
 - Pars assume the reference player compiled available modules. A player who skips compiling can
   still solve everything, but may earn 2★ instead of 3★.
-- Bundle is ~1 MB (mathjs + KaTeX); the size warning is raised deliberately in `vite.config.ts`.
-- No browser is installed in a fresh container: Playwright chromium is installed into the
-  scratchpad (see `CLAUDE.md`).
+- Bundle is ~1.2 MB (mathjs + KaTeX); the size warning is raised deliberately in `vite.config.ts`.
+- **Chapter 2 is gated behind all of Ch. 1** (14 missions). There is no "skip to chapter"
+  option; the Simulator has every rule unlocked.
+- Browser tooling: Chromium is cached in `~/.cache/ms-playwright`; scripts live in per-session
+  scratchpads and don't persist (recipe in `CLAUDE.md`).
 - Progress migration: `Progress.version` is 1; a shape change needs a migration or it resets.

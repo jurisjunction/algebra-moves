@@ -72,7 +72,9 @@ It skips `introduce` moves and free-form params, and enumerates factor pairs and
 Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dialogue `Line[]`.
 
 - **Skill** = a module grouping tactic ids. Granted by a mission (`grants`) or **compiled** by the
-  player (`compile: { uses, missions }`). `supersedes` hides superseded tools (ALU tiers).
+  player (`compile: { uses, missions }`). `supersedes` hides superseded tools (ALU tiers). Kind is
+  `axiom`, `tool`, `daemon`, or `theorem` (a statement proved in a mission, compiled by
+  `compile.missions` alone; its tactic is an ordinary `RuleSpec`, usually with `variants`).
 - **Mission** = briefing, problems, debrief. `requires` gates on a compiled skill; `boss` for
   review; `optional` for challenge sets. Required missions unlock in order; a chapter unlocks when
   the previous one's required missions are done.
@@ -95,6 +97,10 @@ Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dia
 | Tiered ALU (round → one-round → full), naturals only until full | Arithmetic is a *tool the player earns*; the restriction is what forces place-value and regrouping to matter. Negative literals would bypass the sign rules. |
 | Macros (rearrange, everywhere) are compiled, not granted | Chunking: you earn an abstraction after doing it by hand, and can still expand it into single steps. |
 | Pars verified by a simulated reference player | Prevents pars that secretly assume a tool the player can't have, and catches problems a stronger tool trivializes. |
+| Proven laws are quarantined, then trusted | Where the book derives a rule (square of negation, of a quotient), the first problem proves it with the rule in `forbid`. A formula like (a+1)² becomes a `theorem` skill. Rules are earned, not handed over. |
+| Square Table stops at 29² | Mirrors the book's table. Beyond it, the player must use structure (place value + Next Square, square of product/quotient) rather than brute arithmetic. |
+| Power Table stops at 1,000,000 and `pow_def` at 12 copies | Big powers (88888⁴, 11²⁰⁰⁰⁰) must go through the exponent laws. The table's reverse writes a perfect power as a power of its smallest base, which is what "express as a power of 2" needs. |
+| Quotient law refuses m ≤ n | The book states it for m > n; zero and negative exponents are §2.3–2.4. |
 | Progress in localStorage | Single-player, no backend. It can come back empty, so all access is wrapped. |
 
 ## 6. Verification
@@ -103,6 +109,7 @@ Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dia
   LaTeX brackets + path tags, registry, one positive and one negative per rule, diagnostics.
 - **Campaign**: data integrity (ids resolve, no tactic in two skills), reachability of required
   skills, and the reference-player par check.
+- **Deploy**: `.github/workflows/pages.yml` tests, builds (relative `base`), and publishes to GitHub Pages on every push to `main` or `feat/lattice-campaign`.
 - **End-to-end**: a Playwright script replays the whole chapter through the real UI (keyboard
   selection, parameter prompts, compiling modules) and asserts each register is accepted.
 - Screenshots are reviewed by eye; several bugs (garbled rule text, stuck panels) were only visible
@@ -110,6 +117,6 @@ Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dia
 
 ## 7. Scope and non-goals
 
-In scope now: AoPS Ch. 1 rules, integers, variables, single `=` equations. Later chapters bring
+In scope now: AoPS Ch. 1 rules and Ch. 2 §2.1–2.2 (squares, higher exponents), integers, variables, single `=` equations. Later chapters bring
 exponents, fractions, decimals, roots, geometry, and stats. Not goals: a CAS, arbitrary
 simplification, multi-user, or a backend. Known limits are listed in `STATUS.md`.

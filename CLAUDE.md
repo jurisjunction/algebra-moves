@@ -13,14 +13,16 @@ Read next, as needed:
 
 ```bash
 npm run dev      # http://localhost:5173
-npm test         # vitest: engine, rules, campaign (~178 tests, ~30s)
+npm test         # vitest: engine, rules, campaign (~229 tests, ~60s)
 npm run build    # tsc -b && vite build
 ```
 
-Browser checks (no browser is installed by default; Playwright's chromium lives in the
-scratchpad). Launch the dev server, then drive it with a small Playwright script in the
-scratchpad directory, screenshot, and **look at the screenshot**. Existing scripts there:
-`playthrough.mjs` replays the whole campaign through the UI from solver-generated solutions.
+Browser checks: Chromium is cached in `~/.cache/ms-playwright` (use the headless shell as
+`executablePath` with `playwright-core` installed in the scratchpad). Scratchpads are per session,
+so scripts don't survive. Recipe: start the dev server, seed `localStorage["algebra-moves:campaign:v1"]`
+to skip ahead, dump the simulator's solutions to JSON from a throwaway vitest file, replay them by
+clicking `[data-path]` nodes (probe descendant boxes, then repeat-click to widen) and the move's
+name, then screenshot and **look at the screenshot**.
 
 ## Hard invariants
 
@@ -58,6 +60,10 @@ scratchpad directory, screenshot, and **look at the screenshot**. Existing scrip
 - **Solver** skips `introduce` moves and free-form (`expression`) params; problems needing a
   rearrangement must carry an authored `solution`.
 - Don't let a stronger tool trivialize a lesson: use a problem's `forbid` (in-story: "offline").
+- **KaTeX vlists overlap.** Fraction rows sit in tall positioning spans; without the
+  `pointer-events` rule in `index.css` a click on a denominator selects the whole fraction.
+- **Solver budget.** Wide arithmetic problems (many literals, full ALU, `int_factor`) can blow the
+  300k-state budget even at depth 6. Author the `solution` and justify minimality in a comment.
 
 ## Git
 

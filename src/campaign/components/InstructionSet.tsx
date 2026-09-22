@@ -1,4 +1,4 @@
-import { Cpu, Lock, Sparkles, Wrench, X, Zap } from "lucide-react";
+import { Cpu, Lock, ScrollText, Sparkles, Wrench, X, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Tex } from "../../components/Tex";
 import { registry } from "../../engine/registry";
@@ -10,6 +10,7 @@ const KIND: Record<SkillKind, { label: string; icon: typeof Cpu; color: string }
   axiom: { label: "Axiom modules", icon: Cpu, color: "text-cyan-300" },
   tool: { label: "Tools", icon: Wrench, color: "text-amber-300" },
   daemon: { label: "Daemons", icon: Zap, color: "text-fuchsia-300" },
+  theorem: { label: "Theorems", icon: ScrollText, color: "text-emerald-300" },
 };
 
 interface Props {
@@ -90,7 +91,7 @@ export function InstructionSet({ progress, onCompile, onClose }: Props) {
             </section>
           )}
 
-          {(["axiom", "tool", "daemon"] as SkillKind[]).map((k) => {
+          {(["axiom", "theorem", "tool", "daemon"] as SkillKind[]).map((k) => {
             const list = owned.filter((s) => s.kind === k);
             if (!list.length) return null;
             const { label, icon: Icon, color } = KIND[k];

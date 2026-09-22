@@ -169,13 +169,26 @@ fully in ch. 13–14.
    Introduces the ALU tiers (round numbers → one round operand → full), the place-value splitter,
    integer factoring, the rearrange daemons, and the everywhere daemons. Ending: life support is
    shared, and the Custodian recalls its own name.
-2. **THE STACK** (Exponents). A reactor whose output multiplies itself.
-   - 2.1 Squares: the coolant loop squares its input.
-   - 2.2 Higher exponents: cascading stages. Compile a *power-rules* daemon from `x^a x^b` practice.
+2. **THE STACK** (Exponents). A reactor whose output multiplies itself. **§2.1–2.2 playable.**
+   - 2.1 Squares ✅: five missions. COOLANT LOOP (`sq.def`; compiles `sq.table`, the book's
+     table of 0²–29²), MIRROR IN THE LOOP (`sq.neg`, proven first under quarantine; −2² vs (−2)²),
+     PHASE COUPLERS (`sq.mul`, `sq.recip`; `sq.div` proven from them, as in the book), NEXT SQUARE
+     (measure (7+5)² − 7² − 5², then prove (a+1)² = a² + a + (a+1) = a² + 2a + 1), STAGE LADDER
+     (the proof compiles into the **theorem** `sq.next`; climb to 101² with the full ALU offline).
+     Beat: the Custodian compiles a proof for the first time ("A proven statement is a rule").
+     The interim outro seeds the ch. 3 invariant idea: "no square is below zero" is true whatever
+     rule you use, and the Custodian has no module for that kind of knowledge.
+   - 2.2 Higher exponents ✅: six missions. CASCADE STAGES (`pow.def` supersedes `sq.def`;
+     compiles `pow.table`, which also writes 64 as 2⁶), ORDER IN THE STACK (not commutative, not
+     associative; towers read top-down), SIGN CASCADE (`pow.neg`, even case proven first),
+     COMPOUND STAGES (`pow.mul` generalizes the square laws), SAME-BASE COUPLING (`pow.base`:
+     aᵐaⁿ, aᵐ÷aⁿ for m > n, (aᵐ)ⁿ; product law proven by counting first), THREE GIANTS (Problem
+     2.20: MOTH bets on the smallest base and loses). A `pow-collect` daemon is still unbuilt.
    - 2.3 Zero exponent: "the idle state is one, not zero". The Custodian finds this beautiful.
    - 2.4 Negative exponents: venting (reciprocals from ch. 1 return).
    - Boss: bring the Stack online without a runaway.
    - Suggested skills: `pow.def`, `pow.mul`, `pow.pow`, `pow.zero`, `pow.neg`, plus the daemon `pow-collect`.
+     `pow.def` should generalize `sq.def` (a^n as n factors) without removing it.
 3. **THE PRIME VAULT** (Number Theory). The builders' memory sits behind prime-keyed doors.
    Foreshadowing: see the plan above. This chapter introduces the **unreachable register** (see
    "Pedagogical style"): divisibility is exactly the invariant that proves a door is not a door.
@@ -221,6 +234,10 @@ fully in ch. 13–14.
 - **Grant axioms and compile techniques.** Axioms are granted in briefings. A technique the player
   has done by hand many times (such as rearranging a sum) becomes a compiled `daemon` whose
   `compile.uses` counts the modules it fuses.
+- **Prove before you trust.** When the book derives a rule from earlier ones, make the first
+  problem that derivation, with the new module in `forbid` ("quarantined until proven"). When the
+  book derives a formula that is not a rule (like (a+1)²), make it a `theorem` skill compiled from
+  the proof mission. This is the GEB theorem-as-new-rule idea, and it keeps the Custodian honest.
 - **Keep compile thresholds reachable** by the required problems of the gating missions. The test
   suite simulates a reference player, so it will flag a par that depends on a module a normal
   player can't have yet.
