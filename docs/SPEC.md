@@ -109,7 +109,7 @@ Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dia
   LaTeX brackets + path tags, registry, one positive and one negative per rule, diagnostics.
 - **Campaign**: data integrity (ids resolve, no tactic in two skills), reachability of required
   skills, and the reference-player par check.
-- **Deploy**: `.github/workflows/pages.yml` tests, builds (relative `base`), and publishes to GitHub Pages on every push to `main` or `feat/lattice-campaign`.
+- **Deploy**: `.github/workflows/pages.yml` tests, builds (relative `base`), and publishes to GitHub Pages (https://jurisjunction.github.io/algebra-moves/) on every push to `main` or `feat/lattice-campaign`. A failed test blocks the deploy.
 - **End-to-end**: a Playwright script replays the whole chapter through the real UI (keyboard
   selection, parameter prompts, compiling modules) and asserts each register is accepted.
 - Screenshots are reviewed by eye; several bugs (garbled rule text, stuck panels) were only visible

@@ -1,7 +1,8 @@
 # STATUS — resume here
 
 **Updated:** 2026-09-22 · **Branch:** `feat/lattice-campaign` (not merged to `main`) ·
-**Tests:** 294 passing · **Build:** clean · **Deploy:** GitHub Pages via Actions on every push.
+**Tests:** 294 passing · **Build:** clean · **Live:** https://jurisjunction.github.io/algebra-moves/
+(auto-deployed by Actions on every push to `main` or `feat/lattice-campaign`; repo is public).
 
 Ten-second orientation: `CLAUDE.md` (rules of the road) → this file (where we are) →
 `docs/SPEC.md` (contracts) → `docs/STORY.md` (narrative + pedagogy).
@@ -39,7 +40,9 @@ spans overlap).
 
 ## Next steps (pick one)
 
-1. **Playtest feedback** from the user's son (he is reading §2.1–2.2 for Thursday 2026-09-24).
+1. **Playtest feedback** from the user's son, who plays the live site (he is reading §2.1–2.2
+   for Thursday 2026-09-24). Chapter 2 is gated behind all 14 Ch. 1 missions; a "jump to chapter"
+   unlock was offered and not yet requested.
 2. **Ch. 2 §2.3–2.4** (zero exponent, negative exponents). Rules in `ch2_03_*.ts`: `pow.zero`
    (a⁰ = 1, "the idle state is one"), negative exponents as reciprocals (a⁻ⁿ = 1/aⁿ, ch. 1
    reciprocals return), and lift the m > n restriction on `pow_sub`. Then **rewrite the ch2
@@ -54,7 +57,8 @@ spans overlap).
 
 ## Open decisions
 
-- Whether `main` should hold this work directly (user has pushed only the feature branch so far).
+- Whether `main` should hold this work directly. The feature branch is what's deployed; the
+  `github-pages` environment was opened to it so `main` could stay untouched.
 - Whether stars should decay on replay (currently best-ever is kept, XP only for improvement).
 - How hard later chapters should lean on `forbid` versus designing problems the stronger tools
   can't shortcut. §2.1 uses it for two things: quarantining a law until it's proven, and taking

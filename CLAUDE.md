@@ -65,6 +65,13 @@ name, then screenshot and **look at the screenshot**.
 - **Solver budget.** Wide arithmetic problems (many literals, full ALU, `int_factor`) can blow the
   300k-state budget even at depth 6. Author the `solution` and justify minimality in a comment.
 
+## Deploy
+
+Live at https://jurisjunction.github.io/algebra-moves/. **Pushing is deploying**: every push to
+`main` or `feat/lattice-campaign` tests, builds, and publishes (`.github/workflows/pages.yml`). A
+real player (the user's son) uses the live site, so don't push a half-finished chapter. The repo is
+public.
+
 ## Git
 
 Work on a feature branch (currently `feat/lattice-campaign`), never commit to `main` unasked.

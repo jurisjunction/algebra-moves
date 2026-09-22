@@ -3,6 +3,8 @@
 Learn algebraic manipulation as a game of strict, legal moves, like chess. Each step rewrites one
 sub-expression with one named rule from AoPS *Pre-Algebra*.
 
+**Play it:** https://jurisjunction.github.io/algebra-moves/ (progress is saved in your browser).
+
 It has two modes:
 - **Campaign**: a text-based sci-fi RPG. An ancient alien computer, the Custodian, only runs
   rewrites it can justify. You start with a single axiom, practise it on problems ("registers"),
@@ -122,3 +124,11 @@ exactly the skills that player has, and its `par` must equal the true minimum. T
 future chapters is in [docs/STORY.md](docs/STORY.md).
 
 Campaign progress is saved in the browser's `localStorage`.
+
+## Deployment
+
+Every push to `main` or `feat/lattice-campaign` runs `.github/workflows/pages.yml`: tests, build,
+and publish to GitHub Pages at https://jurisjunction.github.io/algebra-moves/. A failing test
+blocks the deploy, and the live site keeps the last good version. Pages uses the "GitHub Actions"
+source, and the `github-pages` environment allows both branches. The build uses a relative
+`base`, so it works under the `/algebra-moves/` subpath.
