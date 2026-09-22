@@ -140,12 +140,13 @@ const chapter: ChapterDef = {
         { who: "CUSTODIAN", text: "Let us begin with the smallest law I still hold. The order in which two quantities are added does not matter: $a + b = b + a$." },
         { who: "SYSTEM", text: "MODULE LOADED · add.comm" },
         { who: "CUSTODIAN", text: "Each register below holds an expression. The lock expects another. Select a part of the expression (click it), then invoke a rule on it. I will accept nothing else." },
+        { who: "CUSTODIAN", text: "Note the brackets. $(p + q) + r$ means: add $p$ and $q$ first, then add $r$. I can swap the two sides of any single addition, but I cannot yet move a bracket." },
         { who: "MOTH", text: "Tip from your friendly autopilot: click a term once to select it, click again to grab the bigger piece around it. Or drag across terms." },
       ],
       problems: [
         { id: "1.1-1", start: "a + b", goal: { type: "match", expr: "b + a" }, par: 1, flavor: "Register 01 holds $a + b$. The lock expects $b + a$.", hint: "Select the whole sum and apply Addition is Commutative." },
         { id: "1.1-2", start: "3 + (x + 7)", goal: { type: "match", expr: "3 + (7 + x)" }, par: 1, flavor: "Only the inner sum is out of order.", hint: "Select just $x + 7$." },
-        { id: "1.1-3", start: "(p + q) + r", goal: { type: "match", expr: "r + (q + p)" }, par: 2, flavor: "Two swaps, at two different depths." },
+        { id: "1.1-3", start: "(p + q) + r", goal: { type: "match", expr: "r + (q + p)" }, par: 2, flavor: "Two additions, one inside the other. Swap the sides of each: the outer one with $r$, and the bracketed one inside it.", hint: "Select the whole expression and swap its two sides, $(p + q)$ and $r$. Then select $p + q$ and swap it." },
       ],
       debrief: [
         { who: "CUSTODIAN", text: "Accepted. You understand: I do only what a rule permits, exactly as it is written." },

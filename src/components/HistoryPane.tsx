@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import type { NodePath, State } from "../types/tactic";
 import { MathView } from "./MathView";
 import { SelectionPath } from "./SelectionPath";
+import { useTex } from "./display";
 import { MathText, Tex } from "./Tex";
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export function HistoryPane({ history, focus, diagnostic, solved, locked, onSelect, onDismissDiagnostic }: Props) {
+  const tex = useTex();
   const endRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -85,7 +87,7 @@ export function HistoryPane({ history, focus, diagnostic, solved, locked, onSele
               </>
             ) : (
               <div className={`overflow-x-auto py-1 ${active ? "text-2xl text-slate-100" : "text-lg text-slate-400"}`}>
-                <Tex latex={s.latex} display />
+                <Tex latex={tex(s.exprNode)} display />
               </div>
             )}
           </li>

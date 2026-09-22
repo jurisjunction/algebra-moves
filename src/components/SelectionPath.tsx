@@ -1,8 +1,8 @@
 import type { MathNode } from "mathjs";
 import { ChevronRight } from "lucide-react";
 import { getAt, isConst, isOp, isRecip, isSym } from "../engine/ast";
-import { toLatex } from "../engine/latex";
 import type { NodePath } from "../types/tactic";
+import { useTex } from "./display";
 import { Tex } from "./Tex";
 
 function kind(n: MathNode): string {
@@ -19,6 +19,7 @@ function kind(n: MathNode): string {
 
 /** Breadcrumb from the whole expression down to the selection; every crumb is clickable. */
 export function SelectionPath({ root, focus, onSelect }: { root: MathNode; focus: NodePath; onSelect: (p: NodePath) => void }) {
+  const tex = useTex();
   const crumbs = Array.from({ length: focus.length + 1 }, (_, i) => focus.slice(0, i));
   return (
     <nav className="flex min-w-0 flex-wrap items-center gap-0.5" aria-label="Selection">
@@ -35,7 +36,7 @@ export function SelectionPath({ root, focus, onSelect }: { root: MathNode; focus
               }`}
               title={last ? "Current selection" : `Select this ${kind(node)}`}
             >
-              {last ? <Tex latex={toLatex(node)} /> : i === 0 ? `whole ${kind(node)}` : kind(node)}
+              {last ? <Tex latex={tex(node)} /> : i === 0 ? `whole ${kind(node)}` : kind(node)}
             </button>
           </span>
         );

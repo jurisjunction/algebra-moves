@@ -2,7 +2,7 @@ import { ArrowLeft, BookOpen, BrainCircuit, ChevronRight, RotateCcw, Star, Targe
 import { useMemo, useState } from "react";
 import { MathText, Tex } from "../../components/Tex";
 import { Workspace, type WorkspaceHint } from "../../components/Workspace";
-import { toLatex } from "../../engine/latex";
+import { useTex } from "../../components/display";
 import { parseProblem } from "../../engine/parse";
 import { registry } from "../../engine/registry";
 import { solve } from "../../engine/solver";
@@ -29,7 +29,8 @@ interface Result {
 }
 
 function GoalView({ goal }: { goal: Goal }) {
-  if (goal.type === "match") return <Tex latex={toLatex(parseProblem(goal.expr))} />;
+  const tex = useTex();
+  if (goal.type === "match") return <Tex latex={tex(parseProblem(goal.expr))} />;
   if (goal.type === "value") return <span className="font-mono text-sm text-slate-300">reduce to a single number</span>;
   return <span className="font-mono text-sm text-slate-300">solve: unknown = number</span>;
 }

@@ -1,8 +1,9 @@
 import type { MathNode } from "mathjs";
 import { useMemo, useRef, useState } from "react";
 import { pathEquals } from "../engine/ast";
-import { decodePath, toLatex } from "../engine/latex";
+import { decodePath } from "../engine/latex";
 import type { NodePath } from "../types/tactic";
+import { useTex } from "./display";
 import { renderTex } from "./Tex";
 
 interface Props {
@@ -36,8 +37,9 @@ export function MathView({ expr, focus, onSelect }: Props) {
   const [dragPreview, setDragPreview] = useState<NodePath | null>(null);
   const lastClick = useRef<NodePath | null>(null);
 
+  const tex = useTex();
   const shown = dragPreview ?? focus;
-  const html = useMemo(() => renderTex(toLatex(expr, { interactive: true, focus: shown }), true), [expr, shown]);
+  const html = useMemo(() => renderTex(tex(expr, { interactive: true, focus: shown }), true), [tex, expr, shown]);
 
   const click = (p: NodePath) => {
     const repeat = lastClick.current && pathEquals(lastClick.current, p);

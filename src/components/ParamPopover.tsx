@@ -1,9 +1,9 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { MathNode } from "mathjs";
-import { toLatex } from "../engine/latex";
 import { parseProblem } from "../engine/parse";
 import type { TacticPlugin, TacticParams } from "../types/tactic";
+import { useTex } from "./display";
 import { MathText, Tex } from "./Tex";
 
 interface Props {
@@ -16,9 +16,9 @@ interface Props {
 }
 
 /** Preview what a choice would produce on the actual target, falling back to the option's own LaTeX. */
-function preview(tactic: TacticPlugin, target: MathNode, choice: string, fallback?: string): string | undefined {
+function preview(tex: ReturnType<typeof useTex>, tactic: TacticPlugin, target: MathNode, choice: string, fallback?: string): string | undefined {
   try {
-    return toLatex(tactic.apply(target, { choice }));
+    return tex(tactic.apply(target, { choice }));
   } catch {
     return fallback;
   }
@@ -28,6 +28,7 @@ export function ParamPopover({ tactic, target, targetLatex, onSubmit, onCancel }
   const schema = tactic.paramSchema!;
   const [p, setP] = useState("");
   const [q, setQ] = useState("");
+  const tex = useTex();
   const [expr, setExpr] = useState(() => tactic.paramDefaults?.(target).expr ?? "");
   const [error, setError] = useState<string | null>(null);
   const firstInput = useRef<HTMLInputElement>(null);
@@ -35,7 +36,7 @@ export function ParamPopover({ tactic, target, targetLatex, onSubmit, onCancel }
   let exprPreview: string | null = null;
   if (schema.type === "expression") {
     try {
-      exprPreview = toLatex(parseProblem(expr));
+      exprPreview = tex(parseProblem(expr));
     } catch {
       exprPreview = null;
     }
@@ -141,7 +142,7 @@ export function ParamPopover({ tactic, target, targetLatex, onSubmit, onCancel }
             >
               <span>{o.label}</span>
               {(() => {
-                const latex = preview(tactic, target, o.value, o.latex);
+                const latex = preview(tex, tactic, target, o.value, o.latex);
                 return latex && <Tex latex={latex} className="text-slate-400" />;
               })()}
             </button>

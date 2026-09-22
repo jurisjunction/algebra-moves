@@ -1,10 +1,10 @@
 import type { MathNode } from "mathjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getAt, getChildren, pathEquals } from "../engine/ast";
-import { toLatex } from "../engine/latex";
 import { safeCanApply } from "../engine/registry";
 import { applyTactic } from "../engine/transformer";
 import type { NodePath, State, TacticParams, TacticPlugin } from "../types/tactic";
+import { useTex } from "./display";
 import { HistoryPane } from "./HistoryPane";
 import { TacticDrawer } from "./TacticDrawer";
 
@@ -50,7 +50,8 @@ export function Workspace({ history, onHistoryChange, tactics, solved, locked, h
 
   const root = history[history.length - 1].exprNode;
   const focusedNode = getAt(root, focus) ?? root;
-  const focusLatex = useMemo(() => toLatex(focusedNode), [focusedNode]);
+  const tex = useTex();
+  const focusLatex = useMemo(() => tex(focusedNode), [tex, focusedNode]);
 
   // A new problem (or an undo) invalidates the selection.
   const start = history[0];
