@@ -1,0 +1,77 @@
+import { defineRules } from "../engine/defineRule";
+import { CH1 } from "./_chapters";
+
+const section = "Negation";
+
+export default defineRules([
+  {
+    id: "neg_add_inverse",
+    name: "Additive Inverse",
+    chapter: CH1,
+    section,
+    description: "The negation of x is the number we add to x to get 0: −x + x = 0.",
+    lhs: "-x + x",
+    rhs: "0",
+  },
+  {
+    id: "neg_neg",
+    name: "Negation of Negation",
+    chapter: CH1,
+    section,
+    description: "−(−x) = x.",
+    lhs: "-(-x)",
+    rhs: "x",
+    bidirectional: true,
+    reverseName: "Negation of Negation (introduce −(−·))",
+  },
+  {
+    id: "neg_mult_neg_one",
+    name: "Multiplying by −1",
+    chapter: CH1,
+    section,
+    description: "(−1)x = −x.",
+    lhs: "(-1) * x",
+    rhs: "-x",
+    bidirectional: true,
+  },
+  {
+    id: "neg_mult_left",
+    name: "Multiplying by Negation (first factor)",
+    chapter: CH1,
+    section,
+    description: "(−x)y = −(xy).",
+    lhs: "(-x) * y",
+    rhs: "-(x * y)",
+    bidirectional: true,
+  },
+  {
+    id: "neg_mult_right",
+    name: "Multiplying by Negation (second factor)",
+    chapter: CH1,
+    section,
+    description: "x(−y) = −(xy).",
+    lhs: "x * (-y)",
+    rhs: "-(x * y)",
+    bidirectional: true,
+  },
+  {
+    id: "neg_times_neg",
+    name: "Negation Times Negation",
+    chapter: CH1,
+    section,
+    description: "(−x)(−y) = xy.",
+    lhs: "(-x) * (-y)",
+    rhs: "x * y",
+    bidirectional: true,
+  },
+  {
+    id: "neg_of_sum",
+    name: "Negation of Sum",
+    chapter: CH1,
+    section,
+    description: "−(x + y) = (−x) + (−y).",
+    lhs: "-(x + y)",
+    rhs: "(-x) + (-y)",
+    bidirectional: true,
+  },
+]);

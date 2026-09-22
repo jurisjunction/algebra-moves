@@ -1,0 +1,477 @@
+import type { ChapterDef } from "../types";
+
+const chapter: ChapterDef = {
+  number: 1,
+  codename: "COLD BOOT",
+  aopsTitle: "Properties of Arithmetic",
+
+  intro: [
+    { who: "SYSTEM", text: "DOCKING CLAMP ENGAGED · TUG KESTREL · EXTERNAL POWER 0.3%" },
+    { who: "MOTH", text: "Okay. Okay okay okay. We're docked to… whatever this is. The hull reads as crystal. Very old crystal." },
+    { who: "YOU", text: "Life support?" },
+    { who: "MOTH", text: "Ours? Nineteen hours. Theirs? I'm reading one process still running in there. It's… asking for something." },
+    { who: "SYSTEM", text: "CUSTODIAN · COLD START · MEMORY INTEGRITY 0.000% · AXIOM TABLE CORRUPT" },
+    { who: "CUSTODIAN", text: "Visitor. My builders are absent. My memory is gone. I retain one law: **I do not guess.** Every change to a value must be justified by a rule I hold. I hold almost none." },
+    { who: "CUSTODIAN", text: "Teach me, and I will wake. Every rule you give me, I keep. Every technique you master, I compile into a tool. Together we may bring this vessel back, and yours with it." },
+    { who: "MOTH", text: "It wants us to do math at it. Great. I can do math! $62 \\cdot 5$ is… about 300?" },
+    { who: "CUSTODIAN", text: "“About” is not an operation." },
+  ],
+
+  outro: [
+    { who: "SYSTEM", text: "KERNEL INTEGRITY 100% · ARITHMETIC CORE RESTORED · LIFE SUPPORT: SHARED" },
+    { who: "CUSTODIAN", text: "I remember now. I am the Custodian of the Lattice. I kept the arithmetic of a people whose name is still sealed in my memory." },
+    { who: "CUSTODIAN", text: "Your air is now my air. But the kernel runs on a trickle. Below us is the Stack, a reactor that multiplies its own output. To wake it, I must learn to count multiplications." },
+    { who: "MOTH", text: "Did it just call our air *its* air? I think it likes you, Operator." },
+    { who: "SYSTEM", text: "SECTOR 2 · THE STACK · SEALED · AWAITING CHAPTER DATA" },
+  ],
+
+  skills: [
+    // ---- Addition ----
+    { id: "add.comm", title: "Commutative Addition", kind: "axiom", tactics: ["add_comm"], lore: "The order of two addends does not matter. The oldest law in the table, and the only one that survived the cold." },
+    { id: "add.assoc", title: "Associative Addition", kind: "axiom", tactics: ["add_assoc", "add_assoc_rev"], lore: "When three quantities are summed, the grouping is yours to choose." },
+    { id: "add.zero", title: "Additive Identity", kind: "axiom", tactics: ["add_zero", "add_zero_rev"], lore: "Zero changes nothing. The Custodian finds this restful." },
+    { id: "alu.1", title: "ALU · Round Core", kind: "tool", tactics: ["alu_round"], lore: "Your species' table of small facts, accepted under supervision: one operation, round numbers only." },
+    { id: "place", title: "Place-Value Splitter", kind: "tool", tactics: ["base10_decompose"], lore: "Every number is a sum of its places: 62 is 60 + 2. The Custodian was delighted to learn you write numbers this way." },
+
+    // ---- Multiplication ----
+    { id: "mul.comm", title: "Commutative Multiplication", kind: "axiom", tactics: ["mult_comm"], lore: "ab = ba. The scaling arrays do not care which way they are wired." },
+    { id: "mul.assoc", title: "Associative Multiplication", kind: "axiom", tactics: ["mult_assoc", "mult_assoc_rev"], lore: "(ab)c = a(bc). Choose the grouping that makes the arithmetic easy." },
+    { id: "mul.one", title: "Multiplicative Identity", kind: "axiom", tactics: ["mult_one", "mult_one_rev"], lore: "1 · a = a. A gate that lets everything through." },
+    { id: "mul.zero", title: "Multiplying by Zero", kind: "axiom", tactics: ["mult_zero"], lore: "0 · x = 0. A gate that lets nothing through." },
+    { id: "dist", title: "Distributor", kind: "axiom", tactics: ["distribute_left", "distribute_right", "factor_left", "factor_right"], lore: "One factor, routed across every term of a sum, or gathered back out of them. The manifold's native language." },
+    {
+      id: "alu.2",
+      title: "ALU · Place-Value Core",
+      kind: "tool",
+      tactics: ["alu_one_round"],
+      supersedes: ["alu.1"],
+      lore: "Compiled from your own place-value maneuvers. One round number and one two-digit number, in a single step.",
+      compile: { uses: { place: 4, dist: 3 }, missions: ["1.3b"] },
+    },
+    { id: "factor", title: "Integer Factorer", kind: "tool", tactics: ["int_factor"], lore: "Break a number into two factors of your choosing. The looms verify the product before accepting it." },
+    {
+      id: "rearrange.mul",
+      title: "Factor Rearranger",
+      kind: "daemon",
+      tactics: ["rearrange_product"],
+      lore: "Commutativity and associativity, fused: reorder and regroup a whole product in one instruction.",
+      compile: { uses: { "mul.comm": 4, "mul.assoc": 4 }, missions: ["1.3a"] },
+    },
+
+    // ---- Negation ----
+    { id: "neg.core", title: "Mirror Registers", kind: "axiom", tactics: ["neg_add_inverse", "neg_neg", "neg_neg_rev"], lore: "Every quantity has a mirror: added together, they cancel to nothing. The mirror of a mirror is the original." },
+    {
+      id: "neg.mul",
+      title: "Signed Scaling",
+      kind: "axiom",
+      tactics: ["neg_mult_neg_one", "neg_mult_neg_one_rev", "neg_mult_left", "neg_mult_left_rev", "neg_mult_right", "neg_mult_right_rev", "neg_times_neg", "neg_times_neg_rev"],
+      lore: "How mirrors pass through multiplication. Two mirrors make a window.",
+    },
+    { id: "neg.sum", title: "Negation of Sums", kind: "axiom", tactics: ["neg_of_sum", "neg_of_sum_rev"], lore: "The mirror of a sum is the sum of the mirrors." },
+
+    // ---- Subtraction ----
+    { id: "sub.def", title: "Definition of Subtraction", kind: "axiom", tactics: ["sub_def", "sub_def_rev"], lore: "Subtracting a number means adding its mirror. The Custodian has no separate machinery for it and never did." },
+    { id: "sub.basic", title: "Subtraction Basics", kind: "axiom", tactics: ["sub_from_zero", "sub_from_zero_rev", "sub_self", "sub_zero", "sub_zero_rev"], lore: "0 − x = −x. x − x = 0. x − 0 = x." },
+    {
+      id: "sub.neg",
+      title: "Signed Subtraction",
+      kind: "axiom",
+      tactics: ["sub_of_neg", "sub_of_neg_rev", "sub_from_neg", "sub_from_neg_rev", "neg_of_sub", "neg_of_sub_rev_sum", "neg_of_sub_rev_diff"],
+      lore: "Subtracting a mirror is adding. The mirror of a difference is the difference reversed.",
+    },
+    { id: "dist.sub", title: "Distributor · Differences", kind: "axiom", tactics: ["dist_sub_left", "dist_sub_left_rev", "dist_sub_right", "dist_sub_right_rev"], lore: "The manifold routes across differences as readily as sums." },
+    { id: "eq.sub", title: "Balance · Addition", kind: "axiom", tactics: ["sub_eq_relation"], lore: "If a + b = c, then a = c − b. An equation is a promise, and promises can be rearranged." },
+    { id: "eq.sym", title: "Symmetry of Equality", kind: "axiom", tactics: ["eq_symmetric"], lore: "If a = b, then b = a. The Custodian considers this too obvious to have forgotten, but it had." },
+    {
+      id: "rearrange",
+      title: "Term Rearranger",
+      kind: "daemon",
+      tactics: ["rearrange_sum"],
+      lore: "Commutativity, associativity, and the definition of subtraction, fused into one instruction: reorder and regroup the terms of any sum.",
+      compile: { uses: { "add.comm": 6, "add.assoc": 6, "sub.def": 1 }, missions: ["1.5a"] },
+    },
+    {
+      id: "negate-all",
+      title: "Mirror Daemon",
+      kind: "daemon",
+      tactics: ["sub_def_all", "sub_def_rev_all"],
+      lore: "Rewrites every subtraction in a region as the addition of a mirror, or back again, in a single sweep.",
+      compile: { uses: { "sub.def": 4 }, missions: ["1.5a"] },
+    },
+    {
+      id: "alu.3",
+      title: "ALU · Full Core",
+      kind: "tool",
+      tactics: ["alu_arithmetic"],
+      supersedes: ["alu.1", "alu.2"],
+      lore: "The complete arithmetic unit. Any single operation on whole numbers, exactly.",
+      compile: { uses: { "alu.2": 8 }, missions: ["1.5a"] },
+    },
+
+    // ---- Reciprocals ----
+    { id: "recip.core", title: "Inverse Lattice", kind: "axiom", tactics: ["recip_inverse", "recip_recip", "recip_recip_rev"], lore: "Every nonzero quantity has an inverse: multiplied together, they make one. Zero has none. Do not ask the Custodian about zero." },
+    { id: "recip.alg", title: "Inverse Algebra", kind: "axiom", tactics: ["recip_product", "recip_product_rev", "recip_neg", "recip_neg_rev"], lore: "The inverse of a product is the product of the inverses. The inverse of a mirror is the mirror of the inverse." },
+
+    // ---- Division ----
+    { id: "div.def", title: "Definition of Division", kind: "axiom", tactics: ["div_def", "div_def_rev"], lore: "Dividing by b means multiplying by the inverse of b. Like subtraction, division is not a new machine. It is a view of an old one." },
+    { id: "div.basic", title: "Division Basics", kind: "axiom", tactics: ["div_into_zero", "div_self", "div_by_one", "div_by_one_rev", "div_into_one", "div_into_one_rev"], lore: "0 ÷ x = 0. x ÷ x = 1. x ÷ 1 = x. 1 ÷ x = 1/x." },
+    { id: "div.recip", title: "Dividing by Inverses", kind: "axiom", tactics: ["div_by_recip", "div_by_recip_rev"], lore: "Dividing by an inverse is multiplying." },
+    { id: "div.cancel", title: "Cancellation", kind: "axiom", tactics: ["div_cancel"], lore: "(ab) ÷ (ac) = b ÷ c. A common factor, top and bottom, cancels." },
+    { id: "div.neg", title: "Signed Division", kind: "axiom", tactics: ["div_into_neg", "div_into_neg_rev", "div_by_neg", "div_by_neg_rev", "div_neg_neg", "div_neg_neg_rev"], lore: "Mirrors pass through division just as they pass through multiplication." },
+    { id: "div.dist", title: "Distributed Division", kind: "axiom", tactics: ["div_dist_add", "div_dist_add_rev", "div_dist_sub", "div_dist_sub_rev"], lore: "A sum divided is the sum of the divisions. But never the other way. The divisor does not distribute." },
+    { id: "eq.div", title: "Balance · Multiplication", kind: "axiom", tactics: ["div_eq_relation"], lore: "If ab = c, then a = c ÷ b." },
+    {
+      id: "divide-all",
+      title: "Inverse Daemon",
+      kind: "daemon",
+      tactics: ["div_def_all", "div_def_rev_all"],
+      lore: "Rewrites every division in a region as multiplication by an inverse, or back again.",
+      compile: { uses: { "div.def": 3 }, missions: ["1.7a"] },
+    },
+  ],
+
+  missions: [
+    {
+      id: "1.1",
+      section: "1.1 Why Start with Arithmetic?",
+      title: "HANDSHAKE",
+      grants: ["add.comm"],
+      briefing: [
+        { who: "CUSTODIAN", text: "Let us begin with the smallest law I still hold. The order in which two quantities are added does not matter: $a + b = b + a$." },
+        { who: "SYSTEM", text: "MODULE LOADED · add.comm" },
+        { who: "CUSTODIAN", text: "Each register below holds an expression. The lock expects another. Select a part of the expression (click it), then invoke a rule on it. I will accept nothing else." },
+        { who: "MOTH", text: "Tip from your friendly autopilot: click a term once to select it, click again to grab the bigger piece around it. Or drag across terms." },
+      ],
+      problems: [
+        { id: "1.1-1", start: "a + b", goal: { type: "match", expr: "b + a" }, par: 1, flavor: "Register 01 holds $a + b$. The lock expects $b + a$.", hint: "Select the whole sum and apply Addition is Commutative." },
+        { id: "1.1-2", start: "3 + (x + 7)", goal: { type: "match", expr: "3 + (7 + x)" }, par: 1, flavor: "Only the inner sum is out of order.", hint: "Select just $x + 7$." },
+        { id: "1.1-3", start: "(p + q) + r", goal: { type: "match", expr: "r + (q + p)" }, par: 2, flavor: "Two swaps, at two different depths." },
+      ],
+      debrief: [
+        { who: "CUSTODIAN", text: "Accepted. You understand: I do only what a rule permits, exactly as it is written." },
+        { who: "MOTH", text: "It's like a vending machine that only takes exact change." },
+        { who: "SYSTEM", text: "HANDSHAKE COMPLETE · AXIOM TABLE 1/40" },
+      ],
+    },
+    {
+      id: "1.2a",
+      section: "1.2 Addition",
+      title: "SUMMATION CORE",
+      grants: ["add.assoc", "add.zero"],
+      briefing: [
+        { who: "CUSTODIAN", text: "The Summation Core is dark. Its cells add in threes, and the grouping of three is ours to choose: $(a + b) + c = a + (b + c)$." },
+        { who: "CUSTODIAN", text: "And zero, added to anything, is that thing: $a + 0 = a$. Note the form. I accept $a + 0$, not $0 + a$, until you show me they are the same." },
+        { who: "SYSTEM", text: "MODULES LOADED · add.assoc · add.zero" },
+      ],
+      problems: [
+        { id: "1.2a-1", start: "(a + b) + c", goal: { type: "match", expr: "a + (b + c)" }, par: 1, flavor: "Regroup cell A." },
+        { id: "1.2a-2", start: "a + (b + c)", goal: { type: "match", expr: "(c + b) + a" }, par: 2, flavor: "Cell B's wiring is reversed." },
+        { id: "1.2a-3", start: "(x + 0) + y", goal: { type: "match", expr: "x + y" }, par: 1, flavor: "A null charge is stuck in cell C." },
+        { id: "1.2a-4", start: "0 + (m + 0)", goal: { type: "match", expr: "m" }, par: 3, flavor: "Two null charges, and one is on the wrong side.", hint: "“Adding Zero” needs the zero on the right. Commute first." },
+        { id: "1.2a-5", start: "(a + b) + (c + d)", goal: { type: "match", expr: "a + (b + (c + d))" }, par: 1, flavor: "The associative law does not care how big $c$ is. $c$ can be a whole sum." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "SUMMATION CORE 31% · CORRIDOR LIGHTING RESTORED" },
+        { who: "MOTH", text: "Lights! We have lights. Also I now see how much dust is in here. Operator, this ship is *ancient*." },
+      ],
+    },
+    {
+      id: "1.2b",
+      section: "1.2 Addition",
+      title: "NUMBER TABLE",
+      grants: ["alu.1", "place"],
+      briefing: [
+        { who: "CUSTODIAN", text: "I do not compute. I only rewrite. But your species carries a table of small facts, and I will accept it under supervision, for **round** numbers only: those with a single nonzero digit, like $7$, $40$, or $300$." },
+        { who: "CUSTODIAN", text: "Anything else, you must first break apart by place value: $62 = 60 + 2$." },
+        { who: "SYSTEM", text: "MODULES LOADED · alu.1 · place" },
+        { who: "MOTH", text: "Wait, it won't add $15 + 3$? That's… honestly, that's how I learned too." },
+      ],
+      problems: [
+        { id: "1.2b-1", start: "7 + 8", goal: { type: "value" }, par: 1, flavor: "Calibration: two round numbers." },
+        { id: "1.2b-2", start: "15 + 3", goal: { type: "value" }, par: 4, flavor: "$15$ is not round. Split it by place value, then regroup.", hint: "$15 = 10 + 5$, then regroup so that $5 + 3$ happens first." },
+        { id: "1.2b-3", start: "40 + 27", goal: { type: "value" }, par: 4, flavor: "Tens with tens, ones with ones." },
+        { id: "1.2b-4", start: "36 + 50", goal: { type: "value" }, par: 5, flavor: "The round number is on the wrong side." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "ALU.1 ONLINE · THROUGHPUT: MINIMAL BUT HONEST" },
+        { who: "CUSTODIAN", text: "You break numbers into places, then add places. I will remember this maneuver. When you have performed it enough, I may be able to compile it." },
+      ],
+    },
+    {
+      id: "1.3a",
+      section: "1.3 Multiplication",
+      title: "SCALING ARRAYS",
+      grants: ["mul.comm", "mul.assoc", "mul.one", "mul.zero"],
+      briefing: [
+        { who: "CUSTODIAN", text: "The scaling arrays multiply. They obey the same symmetries as the Summation Core: $ab = ba$ and $(ab)c = a(bc)$." },
+        { who: "CUSTODIAN", text: "Two more: $1 \\cdot a = a$, and $0 \\cdot x = 0$. As before, I accept exactly those forms." },
+        { who: "SYSTEM", text: "MODULES LOADED · mul.comm · mul.assoc · mul.one · mul.zero" },
+      ],
+      problems: [
+        { id: "1.3a-1", start: "a * (b * c)", goal: { type: "match", expr: "(b * a) * c" }, par: 2, flavor: "Re-seat array 1." },
+        { id: "1.3a-2", start: "(2 * 7) * 5", goal: { type: "value" }, par: 4, flavor: "$7 \\cdot 5$ is fine, but then $2 \\cdot 35$ is not round. Find a better grouping.", hint: "Get the $2$ next to the $5$: $2 \\cdot 5 = 10$." },
+        { id: "1.3a-3", start: "(5 * 9) * 2", goal: { type: "value" }, par: 4, flavor: "Same trick, different wiring." },
+        { id: "1.3a-4", start: "1 * (x * 1)", goal: { type: "match", expr: "x" }, par: 3, flavor: "Two pass-through gates." },
+        { id: "1.3a-5", start: "(x * 0) * 9", goal: { type: "value" }, par: 3, flavor: "A null gate somewhere in the chain." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "SCALING ARRAYS ALIGNED · MEMORY INTEGRITY 18%" },
+        { who: "CUSTODIAN", text: "My voice has more resolution now. Thank you, Operator." },
+        { who: "MOTH", text: "It called you Operator. It has never called me anything." },
+      ],
+    },
+    {
+      id: "1.3b",
+      section: "1.3 Multiplication",
+      title: "DISTRIBUTOR MANIFOLD",
+      grants: ["dist"],
+      briefing: [
+        { who: "CUSTODIAN", text: "The Distributor Manifold routes one factor across every term of a sum: $a(b + c) = ab + ac$. Or it gathers a common factor back out: $ab + ac = a(b + c)$." },
+        { who: "CUSTODIAN", text: "With it, a multiplication your table cannot handle becomes several that it can." },
+        { who: "SYSTEM", text: "MODULE LOADED · dist" },
+        { who: "MOTH", text: "Oh! $62 \\cdot 5$ is $60 \\cdot 5 + 2 \\cdot 5$. That's why it's “about 300”. It's 310! I was *so close*." },
+      ],
+      problems: [
+        { id: "1.3b-1", start: "3 * (x + 2)", goal: { type: "match", expr: "3 * x + 6" }, par: 2, flavor: "Route the 3 across the manifold." },
+        { id: "1.3b-2", start: "62 * 5", goal: { type: "value" }, par: 5, flavor: "MOTH's number. Prove it properly this time." },
+        { id: "1.3b-3", start: "4 * 12", goal: { type: "value" }, par: 5, flavor: "Split, distribute, collect." },
+        { id: "1.3b-4", start: "(20 + 3) * 3", goal: { type: "value" }, par: 4, flavor: "Already split for you. The sum is on the left." },
+        { id: "1.3b-5", start: "x * 3 + x * 7", goal: { type: "match", expr: "x * 10" }, par: 2, flavor: "Run the manifold in reverse: pull out the common factor." },
+      ],
+      debrief: [
+        { who: "CUSTODIAN", text: "Split by place, distribute, collect. You have performed this maneuver enough times that I can see its shape. I can compile it into my arithmetic unit." },
+        { who: "SYSTEM", text: "NEW MODULE COMPILABLE · alu.2 · OPEN THE INSTRUCTION SET TO COMPILE" },
+      ],
+    },
+    {
+      id: "1.3c",
+      section: "1.3 Multiplication",
+      title: "FACTOR LOOMS",
+      grants: ["factor"],
+      requires: ["alu.2"],
+      briefing: [
+        { who: "CUSTODIAN", text: "With the improved arithmetic unit, the Factor Looms can start. They break an integer into a product of your choosing: $28 = 4 \\cdot 7$." },
+        { who: "CUSTODIAN", text: "Why break a number apart? Because the right pieces fit together. $25 \\cdot 4$ is round. $25 \\cdot 28$ is not." },
+        { who: "SYSTEM", text: "MODULE LOADED · factor" },
+      ],
+      problems: [
+        { id: "1.3c-1", start: "25 * 28", goal: { type: "value" }, par: 4, flavor: "Find the hidden 4.", hint: "Factor $28 = 4 \\cdot 7$, then regroup so that $25 \\cdot 4$ happens first." },
+        { id: "1.3c-2", start: "12 * 25", goal: { type: "value" }, par: 4, flavor: "Same idea, other side." },
+        { id: "1.3c-3", start: "51 * 9 + 51 * 31", goal: { type: "value" }, par: 3, flavor: "Adding the two products directly overloads the ALU. Find the common factor." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "FACTOR LOOMS SPINNING · MEMORY INTEGRITY 44%" },
+        { who: "CUSTODIAN", text: "The builders loved this: choosing the grouping that makes the work vanish. I am starting to remember them." },
+      ],
+    },
+    {
+      id: "1.4",
+      section: "1.4 Negation",
+      title: "MIRROR REGISTERS",
+      grants: ["neg.core", "neg.mul", "neg.sum"],
+      briefing: [
+        { who: "CUSTODIAN", text: "Every quantity has a mirror. Added to the original, it gives nothing: $-x + x = 0$." },
+        { who: "CUSTODIAN", text: "The mirror of a mirror is the original. Mirrors pass through multiplication in predictable ways, and two mirrors multiplied make a window: $(-x)(-y) = xy$." },
+        { who: "SYSTEM", text: "MODULES LOADED · neg.core · neg.mul · neg.sum" },
+      ],
+      problems: [
+        { id: "1.4-1", start: "-(-x)", goal: { type: "match", expr: "x" }, par: 1, flavor: "A reflection of a reflection." },
+        { id: "1.4-2", start: "(-7) * (-8)", goal: { type: "value" }, par: 2, flavor: "Two mirrors." },
+        { id: "1.4-3", start: "-a + a + b", goal: { type: "match", expr: "b" }, par: 3, flavor: "A cancelling pair, and one survivor." },
+        { id: "1.4-4", start: "(-3) * 5 + 15", goal: { type: "value" }, par: 3, flavor: "Pull the mirror out of the product first." },
+        { id: "1.4-5", start: "-(x + y) + y", goal: { type: "match", expr: "-x" }, par: 4, flavor: "Distribute the mirror, then cancel." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "MIRROR REGISTERS STABLE · MEMORY INTEGRITY 57%" },
+        { who: "MOTH", text: "So a negative number is just a number that cancels another one? Huh. I've been storing them as “sad positives”." },
+        { who: "CUSTODIAN", text: "Please do not tell me how you store anything." },
+      ],
+    },
+    {
+      id: "1.5a",
+      section: "1.5 Subtraction",
+      title: "DIFFERENTIAL VALVES",
+      grants: ["sub.def", "sub.basic", "sub.neg", "dist.sub"],
+      briefing: [
+        { who: "CUSTODIAN", text: "Your species treats subtraction as its own operation. I do not. Subtracting a number means adding its mirror: $a - b = a + (-b)$." },
+        { who: "CUSTODIAN", text: "Everything you know about sums therefore applies to differences, once they are written as sums." },
+        { who: "SYSTEM", text: "MODULES LOADED · sub.def · sub.basic · sub.neg · dist.sub" },
+      ],
+      problems: [
+        { id: "1.5a-1", start: "12 - (-8)", goal: { type: "value" }, par: 2, flavor: "Subtracting a mirror." },
+        { id: "1.5a-2", start: "x - x + 5", goal: { type: "match", expr: "5" }, par: 2, flavor: "A valve that cancels itself." },
+        { id: "1.5a-3", start: "-(x - y)", goal: { type: "match", expr: "y - x" }, par: 1, flavor: "Reverse the flow." },
+        { id: "1.5a-4", start: "a * (b - c)", goal: { type: "match", expr: "a * b - a * c" }, par: 1, flavor: "The manifold routes across differences too." },
+        { id: "1.5a-5", start: "30 - 7 + 7", goal: { type: "value" }, par: 2, flavor: "Pressure in, pressure out." },
+        { id: "1.5a-6", start: "a - b + b", goal: { type: "match", expr: "a" }, par: 4, flavor: "Prove that adding back what you subtracted restores the original.", hint: "Write the subtraction as adding $-b$, regroup, then cancel." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "DIFFERENTIAL VALVES OPEN · MEMORY INTEGRITY 70%" },
+        { who: "CUSTODIAN", text: "You have commuted and regrouped many sums now. I can fuse those laws into a single instruction that rearranges a whole sum at once. Check the instruction set: several modules are ready to compile." },
+      ],
+    },
+    {
+      id: "1.5b",
+      section: "1.5 Subtraction",
+      title: "BALANCE PROTOCOL",
+      grants: ["eq.sub", "eq.sym"],
+      briefing: [
+        { who: "CUSTODIAN", text: "An equation is a promise: two registers hold the same value. If $a + b = c$, then $a = c - b$, and $b = c - a$." },
+        { who: "CUSTODIAN", text: "Navigation holds its unknowns this way. Solve each one: leave the unknown alone on one side, and a number on the other." },
+        { who: "SYSTEM", text: "MODULES LOADED · eq.sub · eq.sym" },
+      ],
+      problems: [
+        { id: "1.5b-1", start: "x + 3 = 7", goal: { type: "solve" }, par: 2, flavor: "Navigation unknown #1." },
+        { id: "1.5b-2", start: "9 + x = 14", goal: { type: "solve" }, par: 2, flavor: "The unknown is the second addend." },
+        { id: "1.5b-3", start: "12 = x + 4", goal: { type: "solve" }, par: 3, flavor: "The promise is written backwards." },
+        { id: "1.5b-4", start: "x - 5 = 11", goal: { type: "solve" }, par: 3, flavor: "A difference, not a sum. You know what a difference really is.", hint: "Rewrite $x - 5$ as $x + (-5)$ first." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "NAVIGATION STUB ONLINE · EQUALITIES HELD: 4" },
+        { who: "MOTH", text: "It *solved for x*. I've been trying to solve for x my whole life. I don't even know what x is." },
+      ],
+    },
+    {
+      id: "1.6",
+      section: "1.6 Reciprocals",
+      title: "INVERSE LATTICE",
+      grants: ["recip.core", "recip.alg"],
+      briefing: [
+        { who: "CUSTODIAN", text: "Every nonzero quantity has an inverse, the reciprocal $\\frac{1}{x}$, such that $\\frac{1}{x} \\cdot x = 1$." },
+        { who: "CUSTODIAN", text: "Zero has no inverse. The builders sealed a whole wing of the Lattice after someone tried to find one." },
+        { who: "SYSTEM", text: "MODULES LOADED · recip.core · recip.alg" },
+      ],
+      problems: [
+        { id: "1.6-1", start: "recip(5) * 5 * 7", goal: { type: "value" }, par: 2, flavor: "An inverse pair, then a survivor." },
+        { id: "1.6-2", start: "recip(2) * recip(5)", goal: { type: "match", expr: "recip(10)" }, par: 2, flavor: "Merge two inverses." },
+        { id: "1.6-3", start: "recip(3) * recip(recip(3))", goal: { type: "value" }, par: 2, flavor: "An inverse of an inverse." },
+        { id: "1.6-4", start: "recip(-4) * 4", goal: { type: "value" }, par: 3, flavor: "A mirrored inverse, and an unmirrored partner.", hint: "Move the mirror out of the reciprocal, then out of the product." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "INVERSE LATTICE RESONATING · MEMORY INTEGRITY 82%" },
+        { who: "CUSTODIAN", text: "A fragment returns. The builders called the reciprocal “the answer that undoes”. I do not know why I remember that and not their name." },
+      ],
+    },
+    {
+      id: "1.7a",
+      section: "1.7 Division",
+      title: "PARTITION ENGINE",
+      grants: ["div.def", "div.basic", "div.recip", "div.cancel"],
+      briefing: [
+        { who: "CUSTODIAN", text: "Like subtraction, division is not a new machine. Dividing by $b$ means multiplying by its inverse: $a \\div b = a \\cdot \\frac{1}{b}$." },
+        { who: "SYSTEM", text: "MODULES LOADED · div.def · div.basic · div.recip · div.cancel" },
+        { who: "SYSTEM", text: "WARNING · ALU DIVIDER DAMAGED · SOME PARTITIONS MUST BE PROVEN BY HAND" },
+      ],
+      problems: [
+        {
+          id: "1.7a-1",
+          start: "4 / 2",
+          goal: { type: "value" },
+          par: 6,
+          forbid: ["alu.1", "alu.2", "alu.3"],
+          flavor: "The ALU divider is offline. Prove $4 \\div 2$ from the axioms alone.",
+          hint: "Division → multiply by $\\frac{1}{2}$. Factor $4 = 2 \\cdot 2$. Now find a $\\frac{1}{2} \\cdot 2$.",
+        },
+        { id: "1.7a-2", start: "(6 * x) / (6 * y)", goal: { type: "match", expr: "x / y" }, par: 1, flavor: "A common factor, top and bottom." },
+        { id: "1.7a-3", start: "x / 1 + 0 / y", goal: { type: "match", expr: "x" }, par: 3, flavor: "Two trivial partitions." },
+        { id: "1.7a-4", start: "12 / recip(3)", goal: { type: "value" }, par: 2, flavor: "Dividing by an inverse." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "PARTITION ENGINE ONLINE · MEMORY INTEGRITY 91%" },
+        { who: "MOTH", text: "Six moves to prove $4 \\div 2 = 2$. Six! I'm going to have a lie-down in my charging cradle." },
+        { who: "CUSTODIAN", text: "Six honest moves are worth more than one guess." },
+      ],
+    },
+    {
+      id: "1.7b",
+      section: "1.7 Division",
+      title: "SIGNED PARTITIONS",
+      grants: ["div.neg", "div.dist", "eq.div"],
+      briefing: [
+        { who: "CUSTODIAN", text: "Mirrors pass through division. A sum divided is the sum of the divisions: $(a + b) \\div c = a \\div c + b \\div c$." },
+        { who: "CUSTODIAN", text: "But not the reverse. $a \\div (b + c)$ does **not** split. The divisor never distributes. Remember this. The builders did not always." },
+        { who: "SYSTEM", text: "MODULES LOADED · div.neg · div.dist · eq.div" },
+      ],
+      problems: [
+        { id: "1.7b-1", start: "(-12) / (-4)", goal: { type: "value" }, par: 2, forbid: ["alu.3"], flavor: "Mirror over mirror. The full ALU is still in testing, so handle the signs yourself." },
+        { id: "1.7b-2", start: "(x + 6) / 2", goal: { type: "match", expr: "x / 2 + 3" }, par: 2, flavor: "Split the partition." },
+        { id: "1.7b-3", start: "(-x) / 5", goal: { type: "match", expr: "-(x / 5)" }, par: 1, flavor: "Move the mirror outside." },
+        { id: "1.7b-4", start: "3 * x = 12", goal: { type: "solve" }, par: 2, flavor: "A product promise." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "ALL SUBSYSTEMS NOMINAL · INTEGRITY CHECK REQUIRED BEFORE KERNEL COMMIT" },
+        { who: "CUSTODIAN", text: "One more test, Operator. I must verify that what you have taught me holds together." },
+      ],
+    },
+    {
+      id: "1.8",
+      section: "1.8 Summary · Review Problems",
+      title: "KERNEL INTEGRITY CHECK",
+      boss: true,
+      requires: ["alu.3", "rearrange"],
+      briefing: [
+        { who: "SYSTEM", text: "KERNEL INTEGRITY CHECK · ALL MODULES MUST COOPERATE" },
+        { who: "CUSTODIAN", text: "These problems use everything. Choose your tools well: the fewest honest moves." },
+      ],
+      problems: [
+        { id: "1.8-1", start: "3 * (x + 2) = 12", goal: { type: "solve" }, par: 4, flavor: "Integrity vector 1." },
+        { id: "1.8-2", start: "(-7) * (-8) - (-6)", goal: { type: "value" }, par: 4, forbid: ["alu.3"], flavor: "Integrity vector 2. Full ALU withheld: prove the signs." },
+        {
+          id: "1.8-3",
+          start: "268 + 1375 + 6179 - 168 - 1275 - 6079",
+          goal: { type: "value" },
+          par: 6,
+          flavor: "Integrity vector 3. Look before you compute: some of these numbers want to be together.",
+          hint: "Use the Term Rearranger to pair $268$ with $-168$, and so on.",
+          solution: [
+            { path: [], tactic: "rearrange_sum", params: { expr: "(268 - 168) + (1375 - 1275) + (6179 - 6079)" } },
+            { path: [0, 0], tactic: "alu_arithmetic" },
+            { path: [0, 1], tactic: "alu_arithmetic" },
+            { path: [1], tactic: "alu_arithmetic" },
+            { path: [0], tactic: "alu_arithmetic" },
+            { path: [], tactic: "alu_arithmetic" },
+          ],
+        },
+        { id: "1.8-4", start: "x - 2 = 5 - 2", goal: { type: "solve" }, par: 4, flavor: "Integrity vector 4." },
+      ],
+      debrief: [
+        { who: "SYSTEM", text: "INTEGRITY CHECK PASSED · COMMITTING KERNEL…" },
+      ],
+    },
+    {
+      id: "1.9",
+      section: "Challenge Problems",
+      title: "ANOMALIES",
+      optional: true,
+      requires: ["alu.3"],
+      briefing: [
+        { who: "SYSTEM", text: "ANOMALOUS REGISTERS DETECTED · FULL ALU QUARANTINED FOR THESE PROBLEMS" },
+        { who: "CUSTODIAN", text: "These registers resist brute force. Only the older, weaker arithmetic units will touch them. Find the structure." },
+      ],
+      problems: [
+        { id: "1.9-1", start: "98 * 5 + 2 * 5", goal: { type: "value" }, par: 3, forbid: ["alu.3"], flavor: "Anomaly α." },
+        { id: "1.9-2", start: "37 * 25 * 4", goal: { type: "value" }, par: 3, forbid: ["alu.3"], flavor: "Anomaly β." },
+        {
+          id: "1.9-3",
+          start: "99 * 7 + 7",
+          goal: { type: "value" },
+          par: 4,
+          forbid: ["alu.3"],
+          flavor: "Anomaly γ. Where is the second factor of 7?",
+          hint: "$7 = 1 \\cdot 7$. Turn on “Introducing moves” in the drawer.",
+          solution: [
+            { path: [1], tactic: "mult_one_rev" },
+            { path: [], tactic: "factor_right" },
+            { path: [0], tactic: "alu_one_round" },
+            { path: [], tactic: "alu_one_round" },
+          ],
+        },
+      ],
+      debrief: [
+        { who: "CUSTODIAN", text: "Anomalies resolved. You see structure where others see only numbers. The builders would have liked you." },
+      ],
+    },
+  ],
+};
+
+export default chapter;

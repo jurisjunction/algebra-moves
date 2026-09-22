@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: #05080d;
+  color: #d6dde8;
+}
+
+/* Faint grid + vignette: the inside of the Lattice. */
+.lattice-bg {
+  background-color: #05080d;
+  background-image:
+    radial-gradient(ellipse at top, rgb(34 211 238 / 0.07), transparent 60%),
+    linear-gradient(rgb(148 163 184 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(148 163 184 / 0.035) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+
+.glow-cyan {
+  text-shadow: 0 0 12px rgb(34 211 238 / 0.45);
+}
+
+/* Clickable sub-expressions in the active step. Only the innermost hovered node lights up. */
+.am-interactive [data-path] {
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 120ms;
+}
+.am-interactive [data-path]:hover:not(:has([data-path]:hover)) {
+  background-color: rgb(34 211 238 / 0.14);
+}
+.am-focus {
+  background-color: rgb(34 211 238 / 0.16);
+  box-shadow: 0 0 0 1.5px rgb(34 211 238 / 0.85), 0 0 14px rgb(34 211 238 / 0.35);
+  border-radius: 4px;
+}
+.am-interactive .am-focus:hover {
+  background-color: rgb(34 211 238 / 0.24);
+}
+
+.caret::after {
+  content: "▋";
+  margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+  color: rgb(34 211 238);
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 240ms ease-out both;
+}
