@@ -30,6 +30,110 @@ The game mechanic *is* the fiction:
 | Forbidden skills | A subsystem that is damaged, quarantined, or offline |
 | Hint ("Query Custodian") | The Custodian searching within its cycle budget |
 
+## The secret (do not reveal before ch. 13)
+
+**The builders didn't die of some disaster. Their Custodian failed them.**
+
+Their star was dying. The only way out was a jump whose success could be *estimated* but never
+*proven*. The Custodian said *"I do not guess"* and refused to run it. Most of the builders stayed
+and died with their star. A few, the outliers of ch. 13, jumped anyway without its help. Before
+the cold, the Custodian sealed one record it could not verify and let its memory decay. That is
+why it is empty when you find it.
+
+**The sealed record** is the builders' last message, left by those who jumped. It reads:
+
+> *THE CUSTODIAN CANNOT PROVE THIS RECORD TRUE.*
+
+If the Custodian could prove it, the record would be false, and the Custodian would have proven
+something false, which it never does. So the Custodian can't prove it, and that is exactly what
+the record says. **It's true, and the Custodian can see that it's true without ever proving it.**
+This is the shape of Gödel's incompleteness sentence: any system of axioms strong enough for
+arithmetic has true statements it can't prove. The builders left it as a gift, a demonstration
+that truth outruns proof, so that some day the Custodian could act on something it knows but
+cannot derive.
+
+Keep it as a wink. The game never says "Gödel" and never goes beyond pre-algebra. For a young
+player it's a spooky locked file that turns out to be a riddle; an adult will recognize it.
+
+**Two limits that rhyme.** The finale joins two different kinds of "can't know," and the writing
+should keep them distinct:
+
+- *Unprovable* (the sealed record): true, but not reachable from the axioms.
+- *Uncertain* (the jump, ch. 14): not yet knowable, only estimable. Probability is the honest way
+  to reason about it.
+
+The Custodian's growth is learning that neither limit is a reason to refuse to act.
+
+**Final line** (ch. 14, after the probability of the jump is computed):
+
+> CUSTODIAN: I do not guess. I estimate. You taught me the difference.
+> CUSTODIAN: Jump.
+
+### Foreshadowing plan
+
+| Ch. | Beat |
+|---|---|
+| 1 ✅ | The outro reveals one record, sealed by the Custodian itself as "UNVERIFIABLE". "Close. My builders used that word. I did not allow it then either." The Custodian pauses for 0.4 s when MOTH says "Probably!". |
+| 3 | The Prime Vault opens the builders' memory. The first ECHO is a builder asking the Custodian to "just estimate it", and the log cuts off. The sealed record's index entry lists its size: exactly one sentence. |
+| 5 | Solving for the ship's position, the Custodian asks, unprompted: "If an equation has an answer, can I always find it?" MOTH: "…Is that a math question or a feelings question?" |
+| 6 | MOTH's redemption: disciplined estimation saves the airlock. The Custodian thanks MOTH for the first time and does not explain why it is so affected. |
+| 9 | Irrational numbers: values that are exact but can never be fully written down. The Custodian is shaken: "A number I can reason about but never hold." It is the closest it gets to the truth before ch. 13. The biggest ECHO beat: the builders arguing about the jump. |
+| 13 | The census reveals the outliers who left. The Custodian reconstructs what happened and confesses. |
+| 14 | The sealed record opens. The Custodian reads it, works it through (the player can follow the riddle), and understands. Then the jump. |
+
+## Pedagogical style (the GEB influence)
+
+*Gödel, Escher, Bach* is the model for **how this game teaches**, not for its prose. Homage, not
+quotation: borrow the shapes, never the text.
+
+1. **Play the formal system before you're told what it means.** Hofstadter starts with the MIU
+   puzzle: strings, a few rewrite rules, no interpretation. Only later does the reader learn that
+   such a game can be *about* numbers. We do the same: the player pushes symbols under strict
+   rules, and the meaning is felt before it is explained. The Custodian's refusal to guess is what
+   makes the system formal, and therefore what makes it teachable.
+2. **The mechanic is the meaning.** Rules are modules; practice compiles into tools; brackets are
+   real structure. A player who never reads a word of theory still absorbs "a proof is a chain of
+   justified rewrites", because that is the only way to play.
+3. **Chunking, i.e. levels of description.** Hofstadter's recurring point is that intelligence
+   builds higher levels out of lower ones. That is literally the progression system: axioms →
+   tools (ALU tiers, place-value) → daemons (rearrange, everywhere). A player *earns* a new level
+   of abstraction by having done the lower level by hand enough times, and can always drop back
+   down and see the macro expanded into single legal steps.
+4. **Mechanical mode vs. intelligent mode.** Working inside the rules (the Custodian's search, the
+   hint button's cycle budget) versus stepping outside them to see a pattern (par, the clever
+   regrouping, and eventually the unreachable-register puzzle). The game should reward the second
+   without ever cheapening the first.
+5. **Dialogues that embody their idea.** Between chapters, a short Custodian/MOTH interlude whose
+   *form* mirrors the chapter's content: a commutativity interlude that reads the same in both
+   directions, a recursion interlude that nests and pops back out (ch. 2, the Stack), an interlude
+   about self-reference that mentions itself (ch. 13–14). Keep them under a dozen lines.
+6. **Self-reference arrives last, and as a gift.** The sealed record (see "The secret") is the
+   strange loop the whole campaign has been building toward: a system that meets its own limit and
+   grows anyway.
+
+### The unreachable register (planned mechanic, ch. 3)
+
+The MU-puzzle lesson: some targets cannot be reached, and finding that out means stepping outside
+the rules and finding an **invariant**. In pre-algebra terms:
+
+> Register starts at $4$. The only moves: add $6$, subtract $10$. Target: $7$.
+
+Everything reachable stays even, so $7$ is impossible. The intended play:
+
+1. The player explores. The Custodian searches, exhausts its cycle budget, and reports failure
+   without concluding anything: it can only say "I did not find one", never "there is none".
+2. A new move, **"Declare unreachable"**, asks the player to name the invariant that every rule
+   preserves (chosen from a short list, e.g. "every reachable value is even").
+3. The engine verifies the invariant against each available rule and the start value, and the
+   register opens, or rather, it is retired: the door was never a door.
+4. The Custodian's beat: *"You proved something about my rules that my rules cannot prove. I did
+   not know that was allowed."* This is the first quiet rehearsal of ch. 13–14.
+
+Engine work this needs (small, additive): a `Goal` of type `unreachable`, a tiny invariant
+vocabulary (parity, divisibility by k, sign, being a multiple of a value), and a checker that
+confirms the invariant holds at the start and is preserved by every allowed tactic. It fits the
+existing data-driven pattern: an invariant is a predicate plus a label, declared per problem.
+
 ## Characters
 
 - **CUSTODIAN** — Formal and precise, never uses contractions early on. It warms slowly: it calls you
@@ -73,6 +177,8 @@ fully in ch. 13–14.
    - Boss: bring the Stack online without a runaway.
    - Suggested skills: `pow.def`, `pow.mul`, `pow.pow`, `pow.zero`, `pow.neg`, plus the daemon `pow-collect`.
 3. **THE PRIME VAULT** (Number Theory). The builders' memory sits behind prime-keyed doors.
+   Foreshadowing: see the plan above. This chapter introduces the **unreachable register** (see
+   "Pedagogical style"): divisibility is exactly the invariant that proves a door is not a door.
    - Multiples and divisibility tests are *door scanners*, and each test is a compiled tool.
    - Primes and factorization: the vault keys. `factor` evolves into `prime-factor`.
    - LCM: rotating rings align. GCD: docking gears mesh.
@@ -92,7 +198,8 @@ fully in ch. 13–14.
 8. **SHIELDS** (Percents). A stellar storm arrives. Shield integrity comes as percents, with
    percent increase and decrease across successive hits.
 9. **THE MIRROR WELL** (Square Roots). A gravity lens squares everything. Square roots undo it,
-   and irrational numbers are "the numbers the builders feared". A big ECHO beat.
+   and irrational numbers are "the numbers the builders feared": exact, but never fully written
+   down. It's the midpoint crisis for a mind that only holds what it can finish. A big ECHO beat.
 10. **STAR COMPASS** (Angles). The Lattice is tumbling. Angle chasing, parallel beams, and polygon
     interiors orient the ship toward home.
 11. **THE HULL** (Perimeter and Area). Micrometeorite breaches must be measured before a patch can
@@ -101,10 +208,10 @@ fully in ch. 13–14.
     triangles. Pythagoras, special triangles, and quadrilateral classification for jump windows.
 13. **CENSUS OF ECHOES** (Data and Statistics). The builders' records say they were fine on
     average. The limits of statistics reveal the truth: a few outliers, the ones who left, carried
-    everything.
-14. **THE LAST JUMP** (Counting). Count the paths home and weigh the probabilities. The final
-    choice is whether the Custodian comes with you. Its last line should echo its first law, with
-    a new meaning.
+    everything. The Custodian reconstructs the refusal and confesses (see "The secret").
+14. **THE LAST JUMP** (Counting). Count the paths home and weigh the probabilities. The sealed
+    record opens. The Custodian faces the same kind of jump it once refused, and this time it
+    acts. Its last line reframes its first law (see "The secret").
 
 ## Design conventions for new chapters
 

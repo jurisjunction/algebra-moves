@@ -21,7 +21,11 @@ const chapter: ChapterDef = {
     { who: "SYSTEM", text: "KERNEL INTEGRITY 100% · ARITHMETIC CORE RESTORED · LIFE SUPPORT: SHARED" },
     { who: "CUSTODIAN", text: "I remember now. I am the Custodian of the Lattice. I kept the arithmetic of a people whose name is still sealed in my memory." },
     { who: "CUSTODIAN", text: "Your air is now my air. But the kernel runs on a trickle. Below us is the Stack, a reactor that multiplies its own output. To wake it, I must learn to count multiplications." },
-    { who: "MOTH", text: "Did it just call our air *its* air? I think it likes you, Operator." },
+    { who: "MOTH", text: "Did it just call our air **its** air? I think it likes you, Operator." },
+    { who: "SYSTEM", text: "MEMORY INDEX REBUILT · 1 RECORD SEALED · SEALED BY: CUSTODIAN · REASON: UNVERIFIABLE" },
+    { who: "YOU", text: "What's in the sealed record?" },
+    { who: "CUSTODIAN", text: "I do not know. I sealed it myself, before the cold. I keep only what I can prove, and I could not prove it. So I put it away." },
+    { who: "MOTH", text: "You locked a file you can't read, because you couldn't check it, and you don't remember why. That's… that's the most human thing I've heard in here." },
     { who: "SYSTEM", text: "SECTOR 2 · THE STACK · SEALED · AWAITING CHAPTER DATA" },
   ],
 
@@ -230,7 +234,8 @@ const chapter: ChapterDef = {
         { who: "CUSTODIAN", text: "The Distributor Manifold routes one factor across every term of a sum: $a(b + c) = ab + ac$. Or it gathers a common factor back out: $ab + ac = a(b + c)$." },
         { who: "CUSTODIAN", text: "With it, a multiplication your table cannot handle becomes several that it can." },
         { who: "SYSTEM", text: "MODULE LOADED · dist" },
-        { who: "MOTH", text: "Oh! $62 \\cdot 5$ is $60 \\cdot 5 + 2 \\cdot 5$. That's why it's “about 300”. It's 310! I was *so close*." },
+        { who: "MOTH", text: "Oh! $62 \\cdot 5$ is $60 \\cdot 5 + 2 \\cdot 5$. That's why it's “about 300”. It's 310! I was **so close**." },
+        { who: "CUSTODIAN", text: "Close. My builders used that word. I did not allow it then either." },
       ],
       problems: [
         { id: "1.3b-1", start: "3 * (x + 2)", goal: { type: "match", expr: "3 * x + 6" }, par: 2, flavor: "Route the 3 across the manifold." },
@@ -381,6 +386,9 @@ const chapter: ChapterDef = {
         { who: "SYSTEM", text: "PARTITION ENGINE ONLINE · MEMORY INTEGRITY 91%" },
         { who: "MOTH", text: "Six moves to prove $4 \\div 2 = 2$. Six! I'm going to have a lie-down in my charging cradle." },
         { who: "CUSTODIAN", text: "Six honest moves are worth more than one guess." },
+        { who: "MOTH", text: "Probably!" },
+        { who: "SYSTEM", text: "CUSTODIAN · PROCESS PAUSED 0.4s" },
+        { who: "CUSTODIAN", text: "Please do not use that word in here." },
       ],
     },
     {
