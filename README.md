@@ -27,6 +27,11 @@ npm run build
    (↑ also moves up, and Esc selects everything).
 3. Pick a move. Legal moves for the selection are highlighted and listed under **Legal now**.
    Picking an illegal move explains why it doesn't fit.
+4. Explore freely. Going back (Undo, Ctrl+Z, or **back to here** on any earlier step) never throws a
+   line away: a move from an earlier step starts a new line, and **Lines** lists every line you've
+   tried, like an analysis board. Click any step there to go to it. If a move brings back an
+   expression you already had, the game says so and offers to jump back. Only the moves on the
+   line that reaches the goal count toward par.
 
 Notation follows the book:
 - `a / b` is division, shown as a ÷ b.

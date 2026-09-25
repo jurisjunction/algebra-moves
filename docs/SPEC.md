@@ -57,7 +57,13 @@ hidden by default), `variants` (user picks the result), `nonzero` (literal 0 ref
 applying the rule at every match in the selection).
 
 **Transformer.** clone → locate by path → `canApply` (else diagnostic) → `validateParams` →
-`apply` → splice → append `State` to a new history array. States are immutable; undo drops one.
+`apply` → splice → append `State` to a new history array. States are immutable.
+
+**Exploration** (`engine/exploration.ts`). The UI keeps history as a tree of lines, not a stack:
+`extend` adds a move from the current node (reusing a child that holds the same expression),
+`back`/`moveTo` change position without discarding anything, and `lineTo` yields the root→current
+`State[]` the transformer works on. `loopOf` finds an ancestor with the same `structKey` (a loop);
+`transpositionsOf` finds the same expression on other lines.
 
 **Renderer.** Own AST → LaTeX pass (not `toTex`) so brackets reflect the real tree, every node
 carries `\htmlData{path=…}` for selection, and the focus is highlighted. Default display brackets
@@ -84,6 +90,9 @@ Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dia
 - **Progress** (`campaign/progress.ts`, pure + localStorage): owned skills, per-skill usage counts,
   per-problem stars/best moves, missions started/done, chapters seen, XP. Stars: ≤ par = 3, ≤ par+2
   = 2, else 1; a hint caps at 2. Levels use an increasing curve (level L starts at 50·L·(L−1)).
+  The save lives only in the player's browser. `readSave` migrates by `version`; a save it can't
+  read is copied to `algebra-moves:campaign:backup:<time>` before anything overwrites it.
+  `__tests__/fixtures/save-v1.json` pins every shipped mission, problem and skill id.
 
 ## 5. Decisions and why
 
@@ -102,6 +111,8 @@ Data (`campaign/types.ts`): `ChapterDef` → `SkillDef[]` + `MissionDef[]` + dia
 | Power Table stops at 1,000,000 and `pow_def` at 12 copies | Big powers (88888⁴, 11²⁰⁰⁰⁰) must go through the exponent laws. The table's reverse writes a perfect power as a power of its smallest base, which is what "express as a power of 2" needs. |
 | Quotient law refuses m ≤ n | The book states it for m > n; zero and negative exponents are §2.3–2.4. |
 | Progress in localStorage | Single-player, no backend. It can come back empty, so all access is wrapped. |
+| Shipped ids are frozen; saves migrate, never reset | A real player's save can't be recovered by us. Renaming an id silently re-locks missions, so the save fixture test fails on it; a new save format adds a `migrate` case instead of bumping to a new game. |
+| History is a tree; score = depth of the solved node | Players explore like a chess analysis board. Linear undo threw lines away and made loops frustrating; exploring stays free, and only the winning line is scored. |
 
 ## 6. Verification
 

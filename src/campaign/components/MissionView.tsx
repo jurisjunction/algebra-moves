@@ -5,9 +5,10 @@ import { Workspace, type WorkspaceHint } from "../../components/Workspace";
 import { useTex } from "../../components/display";
 import { parseProblem } from "../../engine/parse";
 import { registry } from "../../engine/registry";
+import { back, explore, lineTo, moveTo, type Exploration } from "../../engine/exploration";
 import { solve } from "../../engine/solver";
 import { initialState } from "../../engine/transformer";
-import type { State, TacticPlugin } from "../../types/tactic";
+import type { TacticPlugin } from "../../types/tactic";
 import { TACTIC_SKILL } from "../index";
 import { availableTactics, goalReached, recordMoves, recordSolve, type Progress } from "../progress";
 import type { Goal, MissionDef, ProblemDef } from "../types";
@@ -50,7 +51,8 @@ export function MissionView({ mission, progress, setProgress, onExit, onBriefing
   const [index, setIndex] = useState(firstOpen);
   const problem: ProblemDef = mission.problems[index];
 
-  const [history, setHistory] = useState<State[]>(() => [initialState(parseProblem(problem.start))]);
+  const fresh = (p: ProblemDef) => explore(initialState(parseProblem(p.start)));
+  const [exploration, setExploration] = useState<Exploration>(() => fresh(problem));
   const [usedHint, setUsedHint] = useState(false);
   const [hint, setHint] = useState<WorkspaceHint | null>(null);
   const [hintMsg, setHintMsg] = useState<string | null>(null);
@@ -63,36 +65,44 @@ export function MissionView({ mission, progress, setProgress, onExit, onBriefing
     return registry.getAll().filter((t) => allowed.has(t.id));
   }, [allowedKey]);
 
-  const reset = (p: ProblemDef = problem) => {
-    setHistory([initialState(parseProblem(p.start))]);
+  const clearTurn = () => {
     setUsedHint(false);
     setHint(null);
     setHintMsg(null);
     setResult(null);
   };
 
-  const goTo = (i: number) => {
-    setIndex(i);
-    reset(mission.problems[i]);
+  // Back to the start, keeping every line explored so far.
+  const reset = () => {
+    setExploration((ex) => moveTo(ex, 0));
+    clearTurn();
   };
 
+  const goTo = (i: number) => {
+    setIndex(i);
+    setExploration(fresh(mission.problems[i]));
+    clearTurn();
+  };
+
+  const history = lineTo(exploration);
   const current = history[history.length - 1].exprNode;
   const solved = goalReached(problem.goal, current);
   const moves = history.length - 1;
 
-  const onHistoryChange = (h: State[], applied?: TacticPlugin) => {
-    setHistory(h);
+  const onExplorationChange = (ex: Exploration, applied?: TacticPlugin) => {
+    setExploration(ex);
     setHint(null);
     setHintMsg(null);
-    if (!applied) return;
-    const skill = TACTIC_SKILL.get(applied.id);
+    const skill = applied && TACTIC_SKILL.get(applied.id);
     let next = skill ? recordMoves(progress, [skill]) : progress;
-    if (goalReached(problem.goal, h[h.length - 1].exprNode)) {
-      const r = recordSolve(next, problem, mission, h.length - 1, usedHint);
+    // Jumping onto a line that already reached the goal counts too; recordSolve keeps the best.
+    const line = lineTo(ex);
+    if (goalReached(problem.goal, line[line.length - 1].exprNode)) {
+      const r = recordSolve(next, problem, mission, line.length - 1, usedHint);
       next = r.progress;
-      setResult({ stars: r.stars, gained: r.gained, moves: h.length - 1, missionFinished: r.missionFinished });
+      setResult({ stars: r.stars, gained: r.gained, moves: line.length - 1, missionFinished: r.missionFinished });
     }
-    setProgress(() => next);
+    if (next !== progress) setProgress(() => next);
   };
 
   const askCustodian = () => {
@@ -183,7 +193,7 @@ export function MissionView({ mission, progress, setProgress, onExit, onBriefing
           )}
           <span className="ml-auto flex gap-1.5">
             <button
-              onClick={() => setHistory((h) => (h.length > 1 && !result ? h.slice(0, -1) : h))}
+              onClick={() => !result && setExploration(back)}
               disabled={moves === 0 || !!result}
               className="inline-flex items-center gap-1 rounded-md border border-slate-700 px-2.5 py-1 font-mono text-xs text-slate-300 hover:bg-slate-800 disabled:opacity-40"
             >
@@ -252,10 +262,11 @@ export function MissionView({ mission, progress, setProgress, onExit, onBriefing
       )}
 
       <Workspace
-        history={history}
-        onHistoryChange={onHistoryChange}
+        exploration={exploration}
+        onExplorationChange={onExplorationChange}
         tactics={tactics}
         solved={solved}
+        isGoal={(n) => goalReached(problem.goal, n)}
         locked={!!result}
         hint={hint}
         drawerTitle="Instruction set"

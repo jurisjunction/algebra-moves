@@ -13,7 +13,7 @@ Read next, as needed:
 
 ```bash
 npm run dev      # http://localhost:5173
-npm test         # vitest: engine, rules, campaign (~229 tests, ~60s)
+npm test         # vitest: engine, rules, campaign (~306 tests, ~2 min)
 npm run build    # tsc -b && vite build
 ```
 
@@ -62,6 +62,9 @@ name, then screenshot and **look at the screenshot**.
 - Don't let a stronger tool trivialize a lesson: use a problem's `forbid` (in-story: "offline").
 - **KaTeX vlists overlap.** Fraction rows sit in tall positioning spans; without the
   `pointer-events` rule in `index.css` a click on a denominator selects the whole fraction.
+- **Saves are the player's, not ours.** Never rename a shipped mission, problem or skill id, and
+  never "reset on version mismatch": add a `migrate` case in `progress.ts`. The fixture
+  `src/campaign/__tests__/fixtures/save-v1.json` is append-only; the test fails on a rename.
 - **Solver budget.** Wide arithmetic problems (many literals, full ALU, `int_factor`) can blow the
   300k-state budget even at depth 6. Author the `solution` and justify minimality in a comment.
 

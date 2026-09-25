@@ -1,4 +1,4 @@
-import { AlertTriangle, Trophy, X } from "lucide-react";
+import { AlertTriangle, CornerUpLeft, Repeat, Trophy, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import type { NodePath, State } from "../types/tactic";
 import { MathView } from "./MathView";
@@ -10,14 +10,18 @@ interface Props {
   history: State[];
   focus: NodePath;
   diagnostic: string | null;
+  /** The earlier step the current expression repeats, if the line has looped. */
+  loopStep: number | null;
   solved: boolean;
   /** When true, the latest step is not interactive (e.g. the problem is finished). */
   locked?: boolean;
   onSelect: (path: NodePath) => void;
+  /** Go back to an earlier step; the steps after it stay available as a line. */
+  onJumpToStep: (step: number) => void;
   onDismissDiagnostic: () => void;
 }
 
-export function HistoryPane({ history, focus, diagnostic, solved, locked, onSelect, onDismissDiagnostic }: Props) {
+export function HistoryPane({ history, focus, diagnostic, loopStep, solved, locked, onSelect, onJumpToStep, onDismissDiagnostic }: Props) {
   const tex = useTex();
   const endRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -61,6 +65,16 @@ export function HistoryPane({ history, focus, diagnostic, solved, locked, onSele
                   <Trophy size={12} /> SOLVED
                 </span>
               )}
+              {!active && !locked && (
+                <button
+                  onClick={() => onJumpToStep(i)}
+                  className="ml-auto inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-0.5 whitespace-nowrap text-slate-500 hover:bg-slate-800 hover:text-cyan-300"
+                  title="Go back to this step. The moves after it are kept as a line."
+                  aria-label={`Back to step ${i}`}
+                >
+                  <CornerUpLeft size={12} /> <span className="hidden sm:inline">back to here</span>
+                </button>
+              )}
             </div>
 
             {interactive ? (
@@ -73,6 +87,21 @@ export function HistoryPane({ history, focus, diagnostic, solved, locked, onSele
                     click again to widen · drag across terms · ←↑→↓
                   </span>
                 </div>
+                {loopStep !== null && (
+                  <div className="rise mt-2 flex flex-wrap items-center gap-2 rounded-md border border-amber-400/40 bg-amber-950/40 px-3 py-2 text-sm text-amber-100">
+                    <Repeat size={16} className="shrink-0 text-amber-400" />
+                    <p className="min-w-48 flex-1 leading-relaxed">
+                      You've been here before: this is the same expression as step {loopStep} ({i - loopStep}{" "}
+                      {i - loopStep === 1 ? "move" : "moves"} ago).
+                    </p>
+                    <button
+                      onClick={() => onJumpToStep(loopStep)}
+                      className="inline-flex items-center gap-1 rounded-md border border-amber-400/50 px-2 py-0.5 font-mono text-xs text-amber-200 hover:bg-amber-400/10"
+                    >
+                      <CornerUpLeft size={12} /> Jump back to step {loopStep}
+                    </button>
+                  </div>
+                )}
                 {diagnostic && (
                   <div className="rise mt-2 flex items-start gap-2 rounded-md border border-amber-400/40 bg-amber-950/40 px-3 py-2 text-sm text-amber-100">
                     <AlertTriangle size={16} className="mt-0.5 shrink-0 text-amber-400" />

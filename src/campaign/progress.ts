@@ -171,14 +171,54 @@ export function compileSkill(p: Progress, skill: SkillDef): Progress {
 
 // ---------- Persistence ----------
 
-const KEY = "algebra-moves:campaign:v1";
+export const SAVE_KEY = "algebra-moves:campaign:v1";
+export const BACKUP_PREFIX = "algebra-moves:campaign:backup:";
+
+/**
+ * Bring a stored save up to the current shape. A future format adds a case here; it must never
+ * fall back to a new game, because the save lives only in the player's browser.
+ */
+function migrate(data: Record<string, unknown>): Progress | null {
+  switch (data.version) {
+    case 1:
+      // Fields added later default from NEW_GAME.
+      return { ...NEW_GAME, ...(data as Partial<Progress>), version: 1 };
+    default:
+      return null;
+  }
+}
+
+/** Parse a stored save. `unreadable` means data exists that this build cannot use. */
+export function readSave(raw: string | null): { progress: Progress; unreadable: boolean } {
+  if (!raw) return { progress: NEW_GAME, unreadable: false };
+  try {
+    const data: unknown = JSON.parse(raw);
+    const progress = data && typeof data === "object" && !Array.isArray(data) ? migrate(data as Record<string, unknown>) : null;
+    return progress ? { progress, unreadable: false } : { progress: NEW_GAME, unreadable: true };
+  } catch {
+    return { progress: NEW_GAME, unreadable: true };
+  }
+}
+
+// StrictMode loads twice in development; one backup per distinct save is enough.
+function hasBackup(raw: string): boolean {
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k?.startsWith(BACKUP_PREFIX) && localStorage.getItem(k) === raw) return true;
+  }
+  return false;
+}
 
 export function loadProgress(): Progress {
   try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return NEW_GAME;
-    const data = JSON.parse(raw) as Progress;
-    return data.version === 1 ? { ...NEW_GAME, ...data } : NEW_GAME;
+    const raw = localStorage.getItem(SAVE_KEY);
+    const { progress, unreadable } = readSave(raw);
+    // App saves on mount, which would overwrite the only copy of a save we could not read.
+    if (unreadable && raw && !hasBackup(raw)) {
+      localStorage.setItem(BACKUP_PREFIX + Date.now(), raw);
+      console.warn(`Unreadable campaign save kept under ${BACKUP_PREFIX}*`);
+    }
+    return progress;
   } catch {
     return NEW_GAME;
   }
@@ -186,7 +226,7 @@ export function loadProgress(): Progress {
 
 export function saveProgress(p: Progress): void {
   try {
-    localStorage.setItem(KEY, JSON.stringify(p));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(p));
   } catch {
     // storage unavailable (private mode, blocked): progress lasts for this session only
   }

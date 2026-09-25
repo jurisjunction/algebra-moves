@@ -1,7 +1,7 @@
 # STATUS — resume here
 
-**Updated:** 2026-09-22 · **Branch:** `feat/lattice-campaign` (not merged to `main`) ·
-**Tests:** 294 passing · **Build:** clean · **Live:** https://jurisjunction.github.io/algebra-moves/
+**Updated:** 2026-09-25 · **Branch:** `feat/lattice-campaign` (not merged to `main`) ·
+**Tests:** 306 passing · **Build:** clean · **Live:** https://jurisjunction.github.io/algebra-moves/
 (auto-deployed by Actions on every push to `main` or `feat/lattice-campaign`; repo is public).
 
 Ten-second orientation: `CLAUDE.md` (rules of the road) → this file (where we are) →
@@ -28,6 +28,14 @@ Ten-second orientation: `CLAUDE.md` (rules of the road) → this file (where we 
 - **UI**: dark sci-fi theme; shared `Workspace` for campaign and simulator; click / repeat-click /
   drag / arrow-key selection with breadcrumb; bracket-notation toggle; Theorems section in the
   instruction set.
+- **Exploration tree** (2026-09-25, from playtest: the player explores like a chess player, and
+  loops made him restart in frustration). History is a tree (`engine/exploration.ts`): undo and
+  "back to here" keep abandoned lines; a **Lines** pane lists them chess-style with ✓ goal,
+  ⟲ loop and ⇄ transposition markers; a move that repeats an earlier expression shows a loop
+  notice with "Jump back". Reset/Retry return to the start and keep the lines. Score is still the
+  depth of the solved node.
+- **Save safety**: unreadable saves are backed up instead of overwritten; `save-v1.json` fixture
+  freezes shipped ids (see `CLAUDE.md` traps).
 - **Docs**: `README.md` (play + extend), `docs/SPEC.md`, `docs/STORY.md` (arc, the secret, the
   GEB-influenced pedagogy, planned mechanics).
 
@@ -40,6 +48,9 @@ spans overlap).
 
 ## Next steps (pick one)
 
+0. **Exploration follow-ups.** After a solve, overlay the par line on the player's tree ("engine
+   analysis"): where did his line diverge from the builders'? Then an export/import save code
+   (saves live in one browser). Later: show the tree the Custodian searched for a hint.
 1. **Playtest feedback** from the user's son, who plays the live site (he is reading §2.1–2.2
    for Thursday 2026-09-24). Chapter 2 is gated behind all 14 Ch. 1 missions; a "jump to chapter"
    unlock was offered and not yet requested.
